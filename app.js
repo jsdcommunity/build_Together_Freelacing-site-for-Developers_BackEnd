@@ -4,7 +4,9 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const connectDatabase = require("./config/dataBase");
 const logger = require("morgan");
+const cors = require('cors');
 
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(cookieParser());
@@ -28,8 +30,8 @@ app.use("/api/buyer", buyerRouter);
 
 // Catching 404 requests and passing to errorHandler
 app.use((req, res, next)=> {
-    next(new ErrorResponse(404))
-})
+    next(new ErrorResponse(404));
+});
 
 app.use(errorHandler);
 
