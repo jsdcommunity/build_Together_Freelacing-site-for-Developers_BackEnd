@@ -1,5 +1,3 @@
-const ErrorResponse = require("../utils/ErrorResponse")
-
 module.exports = {
     sayHi: (req, res, next)=> {
         res.status(200).json({

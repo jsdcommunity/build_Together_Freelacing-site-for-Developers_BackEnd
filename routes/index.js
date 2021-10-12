@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const {sayHi} = require('../controllers/indexControllers')
+const {sayHi} = require('../controllers')
 
 router.get('/', sayHi);
 

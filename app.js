@@ -15,7 +15,7 @@ app.use(cookieParser());
 connectDatabase();
 
 // Import all routes
-const indexRouter = require("./routes/index");
+const indexRouter = require("./routes");
 const adminRouter = require("./routes/admin");
 const developerRouter = require("./routes/developer");
 const buyerRouter = require("./routes/buyer");
