@@ -55,6 +55,11 @@ apt install nodejs
 ```
 apt install npm
 ```
+4. Yarn
+
+```
+npm install --global yarn
+```
 
 ### Installing and running
 
@@ -71,7 +76,7 @@ Then go to this project directory by running command `cd build_Together_Freelaci
 Install the dependencies.
 
 ```
-npm install
+yarn install
 ```
 
 Run the server
@@ -79,13 +84,13 @@ Run the server
 - In development mode.
 
   ```
-  npm run dev
+  yarn dev
   ```
 
 - In production mode.
 
   ```
-  npm start
+  yarn start
   ```
 
 ## ⛏️ Built Using <a name = "built_using"></a>
