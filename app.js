@@ -23,10 +23,10 @@ const buyerRouter = require("./routes/buyer");
 const ErrorResponse = require("./utils/ErrorResponse");
 const errorHandler = require("./middlewares/errorHandler");
 
-app.use("/api", indexRouter);
-app.use("/api/admin", adminRouter);
-app.use("/api/developer", developerRouter);
-app.use("/api/buyer", buyerRouter);
+app.use("/api/v1", indexRouter);
+app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/developer", developerRouter);
+app.use("/api/v1/buyer", buyerRouter);
 
 // Catching 404 requests and passing to errorHandler
 app.use((req, res, next)=> {
