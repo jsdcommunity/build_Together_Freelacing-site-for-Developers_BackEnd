@@ -9,6 +9,7 @@ const buyerSchema = new mongoose.Schema({
   location: { type: String, required: true },
   description: { type: String, required: true },
   mobile: { type: Number, required: false },
+  isActive: { type: Boolean, required: true },
 });
 
 module.exports = mongoose.model("Buyer", buyerSchema, "buyers");

@@ -14,6 +14,7 @@ const developerSchema = new mongoose.Schema({
   socialMedias: { type: Array, required: false },
   projects: { type: Array, required: false },
   platform: { type: Array, required: false },
+  isActive: { type: Boolean, required: true },
 });
 
 module.exports = mongoose.model("Developer", developerSchema, "developers");
