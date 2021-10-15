@@ -42,9 +42,7 @@ function onError(error) {
  */
 
 function onListen() {
-  console.log(
-    `Server listening on port ${PORT} in ${process.env.NODE_ENV} mode`
-  );
+  console.log(`Server listening on port ${PORT} in ${process.env.NODE_ENV} mode`);
 }
 
 // handling uncaughtException and unhandledRejection
