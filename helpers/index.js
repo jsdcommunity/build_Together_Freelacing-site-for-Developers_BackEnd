@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const BuyerModel = require("../models/buyer");
 const DeveloperModel = require("../models/developer");
 
@@ -39,9 +40,15 @@ module.exports = {
           });
       }
     }),
-  createToken: userData =>
+  createToken: (data, expiresIn = "15m") =>
     new Promise((resolve, reject) => {
-      // This isn't finished yet
-      let { email, password } = userData;
+      try {
+        const token = jwt.sign(data, process.env.JWT_SECRET_KEY, {
+          expiresIn,
+        });
+        resolve({ token });
+      } catch (err) {
+        reject(err);
+      }
     }),
 };
