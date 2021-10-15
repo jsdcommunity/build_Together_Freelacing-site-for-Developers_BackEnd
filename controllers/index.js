@@ -1,7 +1,6 @@
 const ErrorResponse = require("../utils/ErrorResponse");
-const BuyerModel = require("../models/buyer");
-const DeveloperModel = require("../models/developer");
-const { checkUserExist, createToken } = require("../helpers");
+const { checkUserExist, createToken, verifyToken, saveUser } = require("../helpers");
+const { response } = require("express");
 
 module.exports = {
   sendConfirmEmailToken: (req, res, next) => {
@@ -15,7 +14,7 @@ module.exports = {
         if (userExist) return next(new ErrorResponse(409, message));
 
         // Need to add verification email sending with "nodemailer"
-        createToken(userData)
+        createToken(userData) // chances of contamination of other values
           .then(response => {
             token = response.token;
           })
@@ -31,5 +30,21 @@ module.exports = {
       .catch(err => {
         next(new ErrorResponse(401, err.message));
       });
+  },
+
+  createUser: (req, res, next)=> {
+    const { token } = req.body;
+    verifyToken(token, process.env.JWT_SECRET_KEY)
+      .then(response => {
+        saveUser(response)
+          .then(response => {
+            res.status(201).json({
+              success: true,
+              message: "Email confirmed successfully",
+            });
+          })
+          .catch(err => next(err));
+      })
+      .catch(err => next(err));
   },
 };

@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const BuyerModel = require("../models/buyer");
 const DeveloperModel = require("../models/developer");
+const ErrorResponse = require("../utils/ErrorResponse");
 
 module.exports = {
   checkUserExist: (email, userType) =>
@@ -9,6 +11,8 @@ module.exports = {
         case "developer":
           DeveloperModel.findOne({ email: email }).then(developerExist => {
             if (Boolean(developerExist))
+            // error messages need to be more user specific
+            // return error in reject and catch in "catch"
               resolve({
                 userExist: true,
                 message: "This developer email is already exist in developers",
@@ -40,6 +44,7 @@ module.exports = {
           });
       }
     }),
+
   createToken: (data, expiresIn = "15m") =>
     new Promise((resolve, reject) => {
       try {
@@ -51,4 +56,55 @@ module.exports = {
         reject(err);
       }
     }),
+  
+  verifyToken: (token, secret) => 
+    new Promise((resolve, reject) => {
+      try {
+        const payload = jwt.verify(token, secret);
+        resolve(payload);
+      } catch (err) {
+        reject(err);
+      };
+    }),
+
+  saveUser: (userData)=> 
+    new Promise((resolve, reject)=> {
+      const { email, password, userType } = userData;
+      bcrypt.hash(password, process.env.HASH_SALT).then(hash => {
+        switch (userType) {
+          case "buyer":
+            const buyer = new BuyerModel({
+              email,
+              fullName: "",
+              profileImageUrl: "",
+              password: hash,
+              location: "",
+              description: "",
+              isActive: false,
+            });
+            buyer.save(function(err) {
+              err ? reject(err) : resolve();
+            });
+            break;
+          case "developer":
+            const developer = new DeveloperModel({
+              email,
+              fullName: "",
+              profileImageUrl: "",
+              password: hash,
+              location: "",
+              description: "",
+              isActive: false,
+            });
+            developer.save(function(err) {
+              err ? reject(err) : resolve();
+            });
+            break;
+          default:
+            reject(new ErrorResponse(401, "This user type isn't valid"))
+            break;
+        }
+      }).catch(err => reject(err));
+   }),
+  
 };

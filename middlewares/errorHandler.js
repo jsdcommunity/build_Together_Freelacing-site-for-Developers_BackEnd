@@ -5,9 +5,9 @@ module.exports = (err, req, res, next)=> {
         message = "Not Found"
     }
 
-    if(statusCode == 401){
-        message = "Unauthorized"
-    }
+    // if(statusCode == 401){
+    //     message = "Unauthorized"
+    // }
 
     // sending error response
     // console.error(message)
