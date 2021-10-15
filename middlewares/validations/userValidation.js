@@ -25,10 +25,5 @@ module.exports = {
       .withMessage("Password must be a maximum of 24 characters!")
       .matches(/\d\w/gi)
       .withMessage("Password must contain numeric and alphabetic characters"),
-    (req, res, next) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
-      next();
-    },
   ],
 };
