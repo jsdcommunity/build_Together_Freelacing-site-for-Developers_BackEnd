@@ -56,7 +56,7 @@ module.exports = {
       next(new ErrorResponse(500, err.message));
     }
 
-    // Sending response status response to front end
+    // Sending status response to front end
     res.status(250).json({
       success: true,
       message: "Verify email successfully send to " + email,
