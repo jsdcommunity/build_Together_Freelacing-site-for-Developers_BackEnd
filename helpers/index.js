@@ -35,8 +35,6 @@ module.exports = {
         case "developer":
           DeveloperModel.findOne({ email: email }).then(developerExist => {
             if (Boolean(developerExist))
-            // error messages need to be more user specific
-            // return error in reject and catch in "catch"
               resolve({
                 userExist: true,
                 message: "This developer email is already exist in developers",
@@ -90,46 +88,6 @@ module.exports = {
         reject(err);
       };
     }),
-
-  saveUser: (userData)=> 
-    new Promise((resolve, reject)=> {
-      const { email, password, userType } = userData;
-      bcrypt.hash(password, process.env.HASH_SALT).then(hash => {
-        switch (userType) {
-          case "buyer":
-            const buyer = new BuyerModel({
-              email,
-              fullName: "",
-              profileImageUrl: "",
-              password: hash,
-              location: "",
-              description: "",
-              isActive: false,
-            });
-            buyer.save(function(err) {
-              err ? reject(err) : resolve();
-            });
-            break;
-          case "developer":
-            const developer = new DeveloperModel({
-              email,
-              fullName: "",
-              profileImageUrl: "",
-              password: hash,
-              location: "",
-              description: "",
-              isActive: false,
-            });
-            developer.save(function(err) {
-              err ? reject(err) : resolve();
-            });
-            break;
-          default:
-            reject(new ErrorResponse(401, "This user type isn't valid"))
-            break;
-        }
-      }).catch(err => reject(err));
-   }),
   
   compileHTMLEmailTemplate: (HTMLTemplatePath, replacements = {}) =>
     new Promise((resolve, reject) => {
@@ -142,6 +100,7 @@ module.exports = {
         }
       });
     }),
+
   sendOfficialEmail: ({ toEmail, subject, htmlContent }) =>
     new Promise((resolve, reject) => {
       // Mail options
@@ -161,5 +120,47 @@ module.exports = {
           resolve({ msg: "Verify email successfully send to " + toEmail });
         }
       });
+    }),
+    
+  saveUser: (userData)=> 
+    new Promise((resolve, reject)=> {
+      const { email, password, userType } = userData;
+      // creatig hash password
+      bcrypt.hash(password, parseInt(process.env.HASH_SALT)).then(hash => {
+        // checking for user type and creating new user
+        switch (userType) {
+          case "buyer":
+            const buyer = new BuyerModel({
+              email,
+              fullName: "some",
+              profileImageUrl: "some",
+              password: hash,
+              location: "some",
+              description: "some",
+              isActive: false,
+            });
+            buyer.save((err, user) => {
+              err ? reject(err) : resolve(user);
+            });
+            break;
+          case "developer":
+            const developer = new DeveloperModel({
+              email,
+              fullName: "",
+              profileImageUrl: "",
+              password: hash,
+              location: "",
+              description: "",
+              isActive: false,
+            });
+            developer.save((err, user) => {
+              err ? reject(err) : resolve(user);
+            });
+            break;
+          default:
+            reject(new ErrorResponse(401, "This user type isn't valid"))
+            break;
+        }
+      }).catch(err => reject(new ErrorResponse(500)));
     }),
 };

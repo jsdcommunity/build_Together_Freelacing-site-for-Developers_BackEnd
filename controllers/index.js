@@ -1,14 +1,12 @@
 const ErrorResponse = require("../utils/ErrorResponse");
-const { checkUserExist, createToken, verifyToken, saveUser } = require("../helpers");
-const { response } = require("express");
 const path = require("path");
-const BuyerModel = require("../models/buyer");
-const DeveloperModel = require("../models/developer");
 const {
   checkUserExist,
   createToken,
   sendOfficialEmail,
   compileHTMLEmailTemplate,
+  verifyToken,
+  saveUser,
 } = require("../helpers");
 
 module.exports = {
@@ -19,7 +17,7 @@ module.exports = {
     let token;
     let confirmUrl;
     let htmlContent;
-    const confirmEmailTemplatePath = path.resolve("config/email-templates/confirm-email.html");
+    const confirmEmailTemplatePath = path.resolve("utils/email-templates/confirm-email.html");
 
     // Checking if user exist
     try {
@@ -36,15 +34,6 @@ module.exports = {
     } catch (err) {
       return next(new ErrorResponse(500, err.message));
     }
-
-        // Need to add verification email sending with "nodemailer"
-        createToken(userData) // chances of contamination of other values
-          .then(response => {
-            token = response.token;
-          })
-          .catch(err => {
-            return next(new ErrorResponse(500, err.message));
-          });
     // Generating html content for sending in email
     try {
       htmlContent = await compileHTMLEmailTemplate(confirmEmailTemplatePath, {
@@ -76,16 +65,19 @@ module.exports = {
   createUser: (req, res, next)=> {
     const { token } = req.body;
     verifyToken(token, process.env.JWT_SECRET_KEY)
-      .then(response => {
-        saveUser(response)
-          .then(response => {
-            res.status(201).json({
-              success: true,
-              message: "Email confirmed successfully",
-            });
-          })
-          .catch(err => next(err));
+      .then(response => 
+        saveUser(response))
+      .then(user => {
+        res.status(201).json({
+          success: true,
+          data: user,
+          message: "Email confirmed successfully",
+        });
       })
-      .catch(err => next(err));
+      .catch(err => {
+        err.name == "TokenExpiredError" && next(new ErrorResponse(408, "Link expaired! Please signup again"));
+        err.name == "JsonWebTokenError" && next(new ErrorResponse(401, "Invalid token! Please try again"));
+        next(err);
+      });
   },
 };
