@@ -3,9 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const handlebars = require("handlebars");
 const nodemailer = require("nodemailer");
-const BuyerModel = require("../models/buyer");
-const DeveloperModel = require("../models/developer");
-const ErrorResponse = require("../utils/ErrorResponse");
+const UserModel = require("../models/user");
 
 // Creating a instance for nodemailer transporter using official upbit email
 const transporter = nodemailer.createTransport({
@@ -29,42 +27,26 @@ const readHTMLFile = function (path, callback) {
 };
 
 module.exports = {
-  checkUserExist: (email, userType) =>
+  checkUserExist: email =>
     new Promise((resolve, reject) => {
-      switch (userType) {
-        case "developer":
-          DeveloperModel.findOne({ email: email }).then(developerExist => {
-            if (Boolean(developerExist))
-              resolve({
-                userExist: true,
-                message: "This developer email is already exist in developers",
-              });
-            else
-              resolve({
-                userExist: false,
-                message: "This developer doesn't exist yet",
-              });
-          });
-          break;
-        case "buyer":
-          BuyerModel.findOne({ email: email }).then(buyerExist => {
-            if (Boolean(buyerExist))
-              resolve({
-                userExist: true,
-                message: "This buyer email is already exist in buyers",
-              });
-            else
-              resolve({
-                userExist: false,
-                message: "This buyer doesn't exist yet",
-              });
-          });
-          break;
-        default:
+      UserModel.findOne({ email: email })
+        .then(userExist => {
+          if (Boolean(userExist))
+            resolve({
+              userExist: true,
+              message: "This user email is already exist",
+            });
+          else
+            resolve({
+              userExist: false,
+              message: "This user doesn't exist yet",
+            });
+        })
+        .catch(err =>
           reject({
-            message: "This user type isn't valid",
-          });
-      }
+            message: err.message,
+          })
+        );
     }),
 
   createToken: (data, expiresIn = "15m") =>

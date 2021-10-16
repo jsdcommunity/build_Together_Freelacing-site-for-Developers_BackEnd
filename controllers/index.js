@@ -12,7 +12,7 @@ const {
 module.exports = {
   sendConfirmEmailToken: async (req, res, next) => {
     const userData = req.body;
-    const { email, userType } = userData;
+    const { email } = userData;
 
     let token;
     let confirmUrl;
@@ -21,7 +21,7 @@ module.exports = {
 
     // Checking if user exist
     try {
-      let { userExist, message } = await checkUserExist(email, userType);
+      let { userExist, message } = await checkUserExist(email);
       if (userExist) return next(new ErrorResponse(409, message));
     } catch (err) {
       next(new ErrorResponse(401, err.message));
