@@ -64,13 +64,28 @@ module.exports = {
 
   createUser: (req, res, next)=> {
     const { token } = req.body;
+    let tokenData;
+    // verifying token
     verifyToken(token, process.env.JWT_SECRET_KEY)
-      .then(response => 
-        saveUser(response))
+      .then(response => {
+        tokenData = response;
+        // check for duplicate confirmation link
+        return checkUserExist(response.email);
+      })
+      .then(({userExist}) => {
+        if (userExist) throw new ErrorResponse(409, "Email already confirmed! try login");
+        // creating new user
+        return saveUser(tokenData);
+      })
       .then(user => {
+        const { _id, userType, active } = user;
+        // creating new login token
+        return createToken({_id, userType, active}, "18d");
+      })
+      .then(token => {
         res.status(201).json({
           success: true,
-          data: user,
+          token,
           message: "Email confirmed successfully",
         });
       })

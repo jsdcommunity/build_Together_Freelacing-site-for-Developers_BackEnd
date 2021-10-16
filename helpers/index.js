@@ -108,25 +108,19 @@ module.exports = {
     new Promise((resolve, reject)=> {
       const { email, password, userType } = userData;
       // creatig hash password
-      bcrypt.hash(password, parseInt(process.env.HASH_SALT)).then(hash => {
-        // creating new user
-        const user = new UserModel({
-          userType,
-          email,
-          fullName: "",
-          profileImageUrl: "",
-          password: hash,
-          location: "",
-          description: "",
-          skills: "",
-          projects: "",
-          experience: "",
-          platform: "",
-          // isActive: false,
-        });
-        user.save((err, user) => {
-          err ? reject(err) : resolve(user);
-        });
-      }).catch(err => reject(new ErrorResponse(500)));
+      bcrypt.hash(password, parseInt(process.env.HASH_SALT))
+	  // creating new user
+	  	.then(hash => {
+			const user = new UserModel({
+				active: false,
+				userType,
+				email,
+				password: hash,
+			});
+			user.save((err, user) => {
+				err ? reject(err) : resolve(user);
+			});
+		})
+		.catch(err => reject(new ErrorResponse(500)));
     }),
 };
