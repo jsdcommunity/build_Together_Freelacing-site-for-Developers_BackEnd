@@ -5,7 +5,7 @@ function requiredForDeveloper() {
 }
 
 function requiredForActiveUser() {
-  return this.active === "developer" || this.userType === "both" ? true : false;
+  return this.active;
 }
 
 const userSchema = new mongoose.Schema({
