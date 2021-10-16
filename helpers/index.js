@@ -109,18 +109,18 @@ module.exports = {
       const { email, password, userType } = userData;
       // creatig hash password
       bcrypt.hash(password, parseInt(process.env.HASH_SALT))
-	  // creating new user
+	    // creating new user
 	  	.then(hash => {
-			const user = new UserModel({
-				active: false,
-				userType,
-				email,
-				password: hash,
-			});
-			user.save((err, user) => {
-				err ? reject(err) : resolve(user);
-			});
-		})
-		.catch(err => reject(new ErrorResponse(500)));
+        const user = new UserModel({
+          active: false,
+          userType,
+          email,
+          password: hash,
+        });
+        user.save((err, user) => {
+          err ? reject(err) : resolve(user);
+        });
+      })
+      .catch(err => reject(new ErrorResponse(500)));
     }),
 };
