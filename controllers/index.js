@@ -10,7 +10,7 @@ const {
 module.exports = {
   sendConfirmEmailToken: async (req, res, next) => {
     const userData = req.body;
-    const { email, userType } = userData;
+    const { email } = userData;
 
     let token;
     let confirmUrl;
