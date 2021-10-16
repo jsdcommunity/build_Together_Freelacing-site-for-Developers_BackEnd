@@ -11,11 +11,11 @@ function requiredForActiveUser() {
 const userSchema = new mongoose.Schema({
   userType: { type: String, required: true, lowercase: true },
   email: { type: String, required: true, lowercase: true, unique: true, trim: true },
-  fullName: { type: String, required: true },
   password: { type: String, required: true },
   joined: { type: Date, required: true, default: Date.now() },
   active: { type: Boolean, required: true },
-  profileImageUrl: { type: String, required: true },
+  fullName: { type: String, required: requiredForActiveUser },
+  profileImageUrl: { type: String, required: requiredForActiveUser },
   location: { type: String, required: requiredForActiveUser },
   description: { type: String, required: requiredForActiveUser },
   mobileNum: { type: Number, required: false },
