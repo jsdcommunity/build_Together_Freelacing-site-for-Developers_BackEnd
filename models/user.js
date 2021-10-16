@@ -21,10 +21,10 @@ const userSchema = new mongoose.Schema({
   description: { type: String, required: requiredForActiveUser },
   mobileNum: { type: Number, required: false },
   socialMedias: { type: Array, required: false },
-  skills: { type: Array, required: requiredForDeveloper },
-  projects: { type: Array, required: requiredForDeveloper },
-  experience: { type: Array, required: requiredForDeveloper },
-  platform: { type: Array, required: requiredForDeveloper },
+  skills: { type: Array, required: requiredForActiveDeveloper },
+  projects: { type: Array, required: requiredForActiveDeveloper },
+  experience: { type: Array, required: requiredForActiveDeveloper },
+  platform: { type: Array, required: requiredForActiveDeveloper },
 });
 
 module.exports = mongoose.model("User", userSchema, "users");
