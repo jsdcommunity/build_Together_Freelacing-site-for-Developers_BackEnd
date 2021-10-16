@@ -4,15 +4,20 @@ function requiredForDeveloper() {
   return this.userType === "developer" || this.userType === "both" ? true : false;
 }
 
+function requiredForActiveUser() {
+  return this.active === "developer" || this.userType === "both" ? true : false;
+}
+
 const userSchema = new mongoose.Schema({
   userType: { type: String, required: true, lowercase: true },
   email: { type: String, required: true, lowercase: true, unique: true, trim: true },
   fullName: { type: String, required: true },
-  profileImageUrl: { type: String, required: true },
-  joined: { type: Date, required: true, default: Date.now() },
   password: { type: String, required: true },
-  location: { type: String, required: true },
-  description: { type: String, required: true },
+  joined: { type: Date, required: true, default: Date.now() },
+  active: { type: Boolean, required: true },
+  profileImageUrl: { type: String, required: true },
+  location: { type: String, required: requiredForActiveUser },
+  description: { type: String, required: requiredForActiveUser },
   mobileNum: { type: Number, required: false },
   socialMedias: { type: Array, required: false },
   skills: { type: Array, required: requiredForDeveloper },
