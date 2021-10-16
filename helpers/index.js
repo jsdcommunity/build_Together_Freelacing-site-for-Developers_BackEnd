@@ -62,9 +62,9 @@ module.exports = {
     }),
   
   verifyToken: (token, secret) => 
-    new Promise((resolve, reject) => {
+    new Promise(async (resolve, reject) => {
       try {
-        const payload = jwt.verify(token, secret);
+        const payload = await jwt.verify(token, secret);
         resolve(payload);
       } catch (err) {
         reject(err);
@@ -109,40 +109,24 @@ module.exports = {
       const { email, password, userType } = userData;
       // creatig hash password
       bcrypt.hash(password, parseInt(process.env.HASH_SALT)).then(hash => {
-        // checking for user type and creating new user
-        switch (userType) {
-          case "buyer":
-            const buyer = new BuyerModel({
-              email,
-              fullName: "some",
-              profileImageUrl: "some",
-              password: hash,
-              location: "some",
-              description: "some",
-              isActive: false,
-            });
-            buyer.save((err, user) => {
-              err ? reject(err) : resolve(user);
-            });
-            break;
-          case "developer":
-            const developer = new DeveloperModel({
-              email,
-              fullName: "",
-              profileImageUrl: "",
-              password: hash,
-              location: "",
-              description: "",
-              isActive: false,
-            });
-            developer.save((err, user) => {
-              err ? reject(err) : resolve(user);
-            });
-            break;
-          default:
-            reject(new ErrorResponse(401, "This user type isn't valid"))
-            break;
-        }
+        // creating new user
+        const user = new UserModel({
+          userType,
+          email,
+          fullName: "",
+          profileImageUrl: "",
+          password: hash,
+          location: "",
+          description: "",
+          skills: "",
+          projects: "",
+          experience: "",
+          platform: "",
+          // isActive: false,
+        });
+        user.save((err, user) => {
+          err ? reject(err) : resolve(user);
+        });
       }).catch(err => reject(new ErrorResponse(500)));
     }),
 };
