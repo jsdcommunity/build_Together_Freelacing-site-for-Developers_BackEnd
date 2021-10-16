@@ -1,8 +1,9 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 
-const {sayHi} = require('../controllers')
+const { sendConfirmEmailToken } = require("../controllers");
+const { validateBasicUser } = require("../middlewares/validations/userValidation");
 
-router.get('/', sayHi);
+router.post("/create-user", validateBasicUser, sendConfirmEmailToken);
 
-module.exports=router
+module.exports = router;
