@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, lowercase: true, unique: true, trim: true },
   password: { type: String, required: true },
   joined: { type: Date, required: true, default: Date.now() },
-  active: { type: Boolean, required: true },
+  active: { type: Boolean, required: true, default: false },
   fullName: { type: String, required: requiredForActiveUser },
   profileImageUrl: { type: String, required: requiredForActiveUser },
   location: { type: String, required: requiredForActiveUser },
