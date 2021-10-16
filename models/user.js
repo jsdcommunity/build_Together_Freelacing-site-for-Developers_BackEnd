@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
-function requiredForDeveloper() {
+function requiredForActiveDeveloper() {
+  if(!this.active) return false;
   return this.userType === "developer" || this.userType === "both" ? true : false;
 }
 
