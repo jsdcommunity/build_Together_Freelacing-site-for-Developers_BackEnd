@@ -1,7 +1,5 @@
 const ErrorResponse = require("../utils/ErrorResponse");
 const path = require("path");
-const BuyerModel = require("../models/buyer");
-const DeveloperModel = require("../models/developer");
 const {
   checkUserExist,
   createToken,
@@ -17,11 +15,11 @@ module.exports = {
     let token;
     let confirmUrl;
     let htmlContent;
-    const confirmEmailTemplatePath = path.resolve("config/email-templates/confirm-email.html");
+    const confirmEmailTemplatePath = path.resolve("utils/email-templates/confirm-email.html");
 
     // Checking if user exist
     try {
-      let { userExist, message } = await checkUserExist(email, userType);
+      let { userExist, message } = await checkUserExist(email);
       if (userExist) return next(new ErrorResponse(409, message));
     } catch (err) {
       next(new ErrorResponse(401, err.message));
