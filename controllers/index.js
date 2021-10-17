@@ -96,29 +96,40 @@ module.exports = {
     });
   },
 
-  sendLoginToken: (req,  res, next) => {
+  sendLoginToken: async (req,  res, next) => {
     const { email, password } = req.body;
     let userData;
-    checkUserExist(email) //finding user in db
-      .then(({user, userExist}) => {
-        if(!userExist) throw new ErrorResponse(401, "There is no account associated with this email, Signup now");
-        userData = user;
-        return bcrypt.compare(password, user.password); //if user exist comparing passwords
-      })
-      .then(result => {
-        if(!result) throw new ErrorResponse(401, "Invalid password!");
-        const { _id, userType, active } = userData;
-        return createToken({ _id, userType, active }, "18d"); // if passwords are same creating token
-      })
-      .then(token => {
-        res.status(200).json({
-          success: true,
-          token,
-          message: "Logined Successfully"
-        });
-      })
-      .catch(err => {
-        next(err);
-      });
+    let loginToken;
+
+    try {
+      // finding user in db
+      const { user, userExist } = await checkUserExist(email);
+      if(!userExist) throw new ErrorResponse(401, "There is no account associated with this email, Signup now");
+      userData = user;
+    } catch (err) {
+      return next(err);
+    }
+
+    try {
+      //if user exist comparing passwords
+      const result = await bcrypt.compare(password, userData.password);
+      if(!result) throw new ErrorResponse(401, "Invalid password!");
+    } catch (err) {
+      return next(err);
+    }
+
+    try {
+      // if passwords are same creating token
+      const { _id, userType, active } = userData;
+      loginToken = await createToken({_id, userType, active}, "18d");
+    } catch (err) {
+      return next(err);
+    }
+
+    res.status(200).json({
+      success: true,
+      token: loginToken,
+      message: "Logined Successfully"
+    });
   },
 };
