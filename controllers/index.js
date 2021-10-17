@@ -64,35 +64,46 @@ module.exports = {
 
   saveUser: (req, res, next)=> {
     const { token } = req.body;
-    let tokenData;
-    // verifying token
-    verifyToken(token, process.env.JWT_SECRET_KEY)
-      .then(response => {
-        tokenData = response;
-        // check for duplicate confirmation link
-        return checkUserExist(response.email);
-      })
-      .then(({userExist}) => {
-        if (userExist) throw new ErrorResponse(409, "Email already confirmed! try login");
-        // creating new user
-        return createUser(tokenData);
-      })
-      .then(user => {
-        const { _id, userType, active } = user;
-        // creating new login token
-        return createToken({_id, userType, active}, "18d");
-      })
-      .then(token => {
-        res.status(201).json({
-          success: true,
-          token,
-          message: "Email confirmed successfully",
-        });
-      })
-      .catch(err => {
-        err.name == "TokenExpiredError" && next(new ErrorResponse(408, "Link expaired! Please signup again"));
-        err.name == "JsonWebTokenError" && next(new ErrorResponse(401, "Invalid token! Please try again"));
-        next(err);
-      });
+    let loginToken;
+
+    try {
+      // verifying token
+      const tokenData = await verifyToken(token, process.env.JWT_SECRET_KEY);
+
+      // check for duplicate confirmation link
+      const { userExist } = await checkUserExist(tokenData.email);
+      if(userExist) throw new ErrorResponse(409, "Email already confirmed! try login");
+
+      // creating new user
+      const newUser = await createUser(tokenData);
+
+      // creating new login token
+      const { _id, userType, active } = newUser;
+      loginToken = await createToken({_id, userType, active}, "18d");
+
+    } catch (err) {
+      err.name == "TokenExpiredError" && next(new ErrorResponse(408, "Link expaired! Please signup again"));//error from token verification
+      err.name == "JsonWebTokenError" && next(new ErrorResponse(401, "Invalid token! Please try again"));//error from token verification
+      next(err);
+    }
+
+    //sending response with login token
+    res.status(201).json({
+      success: true,
+      token: loginToken,
+      message: "Email confirmed successfully",
+    });
+
+    
+
+    
+
+    
+    
+
+
+
+
+
   },
 };
