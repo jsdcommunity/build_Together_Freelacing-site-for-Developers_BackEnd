@@ -1,5 +1,6 @@
 const ErrorResponse = require("../utils/ErrorResponse");
 const path = require("path");
+const bcrypt = require("bcrypt")
 const {
   checkUserExist,
   createToken,
@@ -92,6 +93,32 @@ module.exports = {
       .catch(err => {
         err.name == "TokenExpiredError" && next(new ErrorResponse(408, "Link expaired! Please signup again"));
         err.name == "JsonWebTokenError" && next(new ErrorResponse(401, "Invalid token! Please try again"));
+        next(err);
+      });
+  },
+
+  sendLoginToken: (req,  res, next) => {
+    const { email, password } = req.body;
+    let userData;
+    checkUserExist(email) //finding user in db
+      .then(({user, userExist}) => {
+        if(!userExist) throw new ErrorResponse(401, "There is no account associated with this email, Signup now");
+        userData = user;
+        return bcrypt.compare(password, user.password); //if user exist comparing passwords
+      })
+      .then(result => {
+        if(!result) throw new ErrorResponse(401, "Invalid password!");
+        const { _id, userType, active } = userData;
+        return createToken({ _id, userType, active }, "18d"); // if passwords are same creating token
+      })
+      .then(token => {
+        res.status(200).json({
+          success: true,
+          token,
+          message: "Logined Successfully"
+        });
+      })
+      .catch(err => {
         next(err);
       });
   },
