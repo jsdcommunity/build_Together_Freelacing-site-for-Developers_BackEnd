@@ -93,17 +93,5 @@ module.exports = {
       token: loginToken,
       message: "Email confirmed successfully",
     });
-
-    
-
-    
-
-    
-    
-
-
-
-
-
   },
 };
