@@ -104,7 +104,7 @@ module.exports = {
       });
     }),
     
-  saveUser: (userData)=> 
+  createUser: (userData)=> 
     new Promise((resolve, reject)=> {
       const { email, password, userType } = userData;
       // creatig hash password

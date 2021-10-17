@@ -6,7 +6,7 @@ const {
   sendOfficialEmail,
   compileHTMLEmailTemplate,
   verifyToken,
-  saveUser,
+  createUser,
 } = require("../helpers");
 
 module.exports = {
@@ -62,7 +62,7 @@ module.exports = {
     });
   },
 
-  createUser: (req, res, next)=> {
+  saveUser: (req, res, next)=> {
     const { token } = req.body;
     let tokenData;
     // verifying token
@@ -75,7 +75,7 @@ module.exports = {
       .then(({userExist}) => {
         if (userExist) throw new ErrorResponse(409, "Email already confirmed! try login");
         // creating new user
-        return saveUser(tokenData);
+        return createUser(tokenData);
       })
       .then(user => {
         const { _id, userType, active } = user;
