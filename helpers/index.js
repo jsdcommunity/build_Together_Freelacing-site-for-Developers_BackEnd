@@ -33,6 +33,7 @@ module.exports = {
         .then(userExist => {
           if (Boolean(userExist))
             resolve({
+              user: userExist,
               userExist: true,
               message: "This user email is already exist",
             });
