@@ -5,6 +5,8 @@ const {
   createToken,
   sendOfficialEmail,
   compileHTMLEmailTemplate,
+  verifyToken,
+  createUser,
 } = require("../helpers");
 
 module.exports = {
@@ -32,7 +34,6 @@ module.exports = {
     } catch (err) {
       return next(new ErrorResponse(500, err.message));
     }
-
     // Generating html content for sending in email
     try {
       htmlContent = await compileHTMLEmailTemplate(confirmEmailTemplatePath, {
@@ -58,6 +59,39 @@ module.exports = {
     res.status(250).json({
       success: true,
       message: "Verify email successfully send to " + email,
+    });
+  },
+
+  saveUser: async (req, res, next)=> {
+    const { token } = req.body;
+    let loginToken;
+
+    try {
+      // verifying token
+      const tokenData = await verifyToken(token, process.env.JWT_SECRET_KEY);
+
+      // check for duplicate confirmation link
+      const { userExist } = await checkUserExist(tokenData.email);
+      if(userExist) throw new ErrorResponse(409, "Email already confirmed! try login");
+
+      // creating new user
+      const newUser = await createUser(tokenData);
+
+      // creating new login token
+      const { _id, userType, active } = newUser;
+      loginToken = await createToken({_id, userType, active}, "18d");
+
+    } catch (err) {
+      if(err.name == "TokenExpiredError") return next(new ErrorResponse(408, "Link expaired! Please signup again"));//error from token verification
+      if(err.name == "JsonWebTokenError") return next(new ErrorResponse(401, "Invalid token! Please try again"));//error from token verification
+      return next(err);
+    }
+
+    //sending response with login token
+    res.status(201).json({
+      success: true,
+      token: loginToken,
+      message: "Email confirmed successfully",
     });
   },
 };

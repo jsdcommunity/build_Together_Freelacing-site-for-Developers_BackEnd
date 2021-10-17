@@ -1,5 +1,6 @@
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const handlebars = require("handlebars");
 const nodemailer = require("nodemailer");
 const UserModel = require("../models/user");
@@ -47,6 +48,7 @@ module.exports = {
           })
         );
     }),
+
   createToken: (data, expiresIn = "15m") =>
     new Promise((resolve, reject) => {
       try {
@@ -58,6 +60,17 @@ module.exports = {
         reject(err);
       }
     }),
+  
+  verifyToken: (token, secret) => 
+    new Promise(async (resolve, reject) => {
+      try {
+        const payload = await jwt.verify(token, secret);
+        resolve(payload);
+      } catch (err) {
+        reject(err);
+      };
+    }),
+  
   compileHTMLEmailTemplate: (HTMLTemplatePath, replacements = {}) =>
     new Promise((resolve, reject) => {
       readHTMLFile(HTMLTemplatePath, function (err, html) {
@@ -69,6 +82,7 @@ module.exports = {
         }
       });
     }),
+
   sendOfficialEmail: ({ toEmail, subject, htmlContent }) =>
     new Promise((resolve, reject) => {
       // Mail options
@@ -88,5 +102,25 @@ module.exports = {
           resolve({ msg: "Verify email successfully send to " + toEmail });
         }
       });
+    }),
+    
+  createUser: (userData)=> 
+    new Promise((resolve, reject)=> {
+      const { email, password, userType } = userData;
+      // creatig hash password
+      bcrypt.hash(password, parseInt(process.env.HASH_SALT))
+	    // creating new user
+	  	.then(hash => {
+        const user = new UserModel({
+          active: false,
+          userType,
+          email,
+          password: hash,
+        });
+        user.save((err, user) => {
+          err ? reject(err) : resolve(user);
+        });
+      })
+      .catch(err => reject(new ErrorResponse(500)));
     }),
 };
