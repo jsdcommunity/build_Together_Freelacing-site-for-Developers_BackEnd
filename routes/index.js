@@ -7,6 +7,6 @@ const { validateBasicUser } = require("../middlewares/validations/userValidation
 
 router.post("/create-user", validateBasicUser, validationResults, sendConfirmEmailToken);
 router.post("/confirm-email", validateToken, validationResults, saveUser);
-router.post("/login", validateBasicUser, validationResults, sendLoginToken)
+router.post("/login", validateBasicUser, validationResults, sendLoginToken);
 
 module.exports = router;
