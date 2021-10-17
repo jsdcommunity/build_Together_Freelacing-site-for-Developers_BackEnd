@@ -62,7 +62,7 @@ module.exports = {
     });
   },
 
-  saveUser: (req, res, next)=> {
+  saveUser: async (req, res, next)=> {
     const { token } = req.body;
     let loginToken;
 
@@ -82,9 +82,9 @@ module.exports = {
       loginToken = await createToken({_id, userType, active}, "18d");
 
     } catch (err) {
-      err.name == "TokenExpiredError" && next(new ErrorResponse(408, "Link expaired! Please signup again"));//error from token verification
-      err.name == "JsonWebTokenError" && next(new ErrorResponse(401, "Invalid token! Please try again"));//error from token verification
-      next(err);
+      if(err.name == "TokenExpiredError") return next(new ErrorResponse(408, "Link expaired! Please signup again"));//error from token verification
+      if(err.name == "JsonWebTokenError") return next(new ErrorResponse(401, "Invalid token! Please try again"));//error from token verification
+      return next(err);
     }
 
     //sending response with login token
