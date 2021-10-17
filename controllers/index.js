@@ -62,7 +62,7 @@ module.exports = {
     });
   },
 
-  saveUser: (req, res, next)=> {
+  saveUser: async (req, res, next)=> {
     const { token } = req.body;
     let loginToken;
 
