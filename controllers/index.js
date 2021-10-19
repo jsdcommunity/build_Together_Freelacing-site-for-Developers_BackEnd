@@ -104,7 +104,7 @@ module.exports = {
     try {
       // finding user in db
       const { user, userExist } = await checkUserExist(email);
-      if(!userExist) throw new ErrorResponse(401, "There is no account associated with this email, Signup now");
+      if(!userExist) throw new ErrorResponse(404, "There is no account associated with this email, Signup now");
       userData = user;
     } catch (err) {
       return next(err);
