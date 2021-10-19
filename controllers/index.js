@@ -129,7 +129,7 @@ module.exports = {
     res.status(200).json({
       success: true,
       token: loginToken,
-      message: "Logined Successfully"
+      message: "Logged in Successfully"
     });
   },
 };
