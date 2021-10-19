@@ -132,4 +132,51 @@ module.exports = {
       message: "Logged in Successfully"
     });
   },
+
+  sendResetPasswordToken: async (req, res, next) => {
+    const { email } = req.body;
+    let resetToken;
+    let htmlContent;
+    const resetPasswordEmailTemplatePath = path.resolve("utils/email-templates/reset-password-email.html");
+
+    try {
+      // check if user exists with giver email
+      const { userExist } = await checkUserExist(email);
+      if(!userExist) throw new ErrorResponse(404, "There is no account associated with this email, Signup now");
+    } catch (err) {
+      return next(err);
+    }
+
+    try{
+      // creating jwt token for reset password link
+      resetToken = await createToken({ email }, "10m");
+    } catch (err) {
+      return next(err);
+    }
+
+    try{
+      // creating email with reset password link
+      const resetUrl = `https://but-jsd-3.herokuapp.com/reset-password/${resetToken}`;
+      htmlContent = await compileHTMLEmailTemplate(resetPasswordEmailTemplatePath, { resetUrl });
+    } catch (err) {
+      return next(new ErrorResponse(500));
+    }
+
+    try {
+      // sending email
+      const response = await sendOfficialEmail({
+        toEmail: email,
+        subject: "Reset your password now",
+        htmlContent
+      });
+    } catch (err) {
+      return next(new ErrorResponse(500));
+    }
+
+    // sending response to front
+    res.status(250).json({
+      success: true,
+      message: "Reset password link successfully send to " + email,
+    });
+  },
 };
