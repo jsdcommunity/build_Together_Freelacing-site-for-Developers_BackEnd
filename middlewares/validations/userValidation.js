@@ -26,4 +26,20 @@ module.exports = {
       .matches(/\d\w/gi)
       .withMessage("Password must contain numeric and alphabetic characters"),
   ],
+
+  validateEmail: [
+    check("email")
+      .trim()
+      .isEmail()
+      .normalizeEmail()
+      .withMessage("Email must be valid!")
+      .not()
+      .isEmpty()
+      .withMessage("Email cannot be empty!")
+      .bail()
+      .isLength({ min: 3 })
+      .withMessage("Minimum 3 characters required!")
+      .isLength({ max: 30 })
+      .withMessage("Maximum 30 characters only!")
+  ],
 };
