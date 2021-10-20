@@ -36,5 +36,6 @@ const validateUserType = check("userType")
 module.exports = {
   validateEmail,
   validatePassword,
-  validateBasicUser: [validateEmail, validatePassword, validateUserType],
+  validateUserType,
+  validateBasicUser: [validateEmail, validatePassword],
 };
