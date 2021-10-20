@@ -112,7 +112,7 @@ module.exports = {
     }
 
     try {
-      //if user exist comparing passwords
+      //if user exist, comparing passwords
       const result = await bcrypt.compare(password, userData.password);
       if(!result) throw new ErrorResponse(401, "Invalid password!");
     } catch (err) {
