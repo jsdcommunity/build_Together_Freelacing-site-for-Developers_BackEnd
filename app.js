@@ -30,7 +30,7 @@ app.use("/api/v1/buyer", buyerRouter);
 
 // Catching 404 requests and passing to errorHandler
 app.use((req, res, next)=> {
-    next(new ErrorResponse(404));
+    next(new ErrorResponse(404, "Not found"));
 });
 
 app.use(errorHandler);
