@@ -6,13 +6,18 @@ const {
     saveUser,
     sendLoginToken,
     sendResetPasswordToken,
-  resetPassword,
+    resetPassword,
 } = require("../controllers");
 const { validationResults, validateToken } = require("../middlewares/validations");
-const { validateBasicUser, validateEmail, validatePassword } = require("../middlewares/validations/userValidation");
+const {
+  validateBasicUser,
+  validateEmail,
+  validatePassword,
+  validateUserType
+} = require("../middlewares/validations/userValidation");
 
 // Sign up user
-router.post("/create-user", validateBasicUser, validationResults, sendConfirmEmailToken);
+router.post("/create-user", validateBasicUser, validateUserType, validationResults, sendConfirmEmailToken);
 router.post("/confirm-email", validateToken, validationResults, saveUser);
 
 // Login user

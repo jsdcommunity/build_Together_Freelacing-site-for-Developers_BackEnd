@@ -25,8 +25,17 @@ const validatePassword = check("password")
   .matches(/\d\w/gi)
   .withMessage("Password must contain numeric and alphabetic characters");
 
+const validateUserType = check("userType")
+  .trim()
+  .not()
+  .isEmpty()
+  .withMessage("User type cannot be empty!")
+  .isIn(["developer", "buyer", "both"])
+  .withMessage("Invalid user type")
+
 module.exports = {
   validateEmail,
   validatePassword,
+  validateUserType,
   validateBasicUser: [validateEmail, validatePassword],
 };
