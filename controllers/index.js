@@ -8,6 +8,7 @@ const {
   compileHTMLEmailTemplate,
   verifyToken,
   createUser,
+  updateUser
 } = require("../helpers");
 
 module.exports = {
@@ -69,7 +70,7 @@ module.exports = {
 
     try {
       // verifying token
-      const tokenData = await verifyToken(token, process.env.JWT_SECRET_KEY);
+      const tokenData = await verifyToken(token);
 
       // check for duplicate confirmation link
       const { userExist } = await checkUserExist(tokenData.email);
@@ -111,7 +112,7 @@ module.exports = {
     }
 
     try {
-      //if user exist comparing passwords
+      //if user exist, comparing passwords
       const result = await bcrypt.compare(password, userData.password);
       if(!result) throw new ErrorResponse(401, "Invalid password!");
     } catch (err) {
@@ -132,4 +133,86 @@ module.exports = {
       message: "Logged in Successfully"
     });
   },
+
+  sendResetPasswordToken: async (req, res, next) => {
+    const { email } = req.body;
+    let resetToken;
+    let htmlContent;
+    const resetPasswordEmailTemplatePath = path.resolve("utils/email-templates/reset-password-email.html");
+
+    try {
+      // check if user exists with giver email
+      const { userExist } = await checkUserExist(email);
+      if(!userExist) throw new ErrorResponse(404, "There is no account associated with this email, Signup now");
+    } catch (err) {
+      return next(err);
+    }
+
+    try{
+      // creating jwt token for reset password link
+      resetToken = await createToken({ email }, "10m");
+    } catch (err) {
+      return next(err);
+    }
+
+    try{
+      // creating email with reset password link
+      const resetUrl = `https://but-jsd-3.herokuapp.com/reset-password/${resetToken}`;
+      htmlContent = await compileHTMLEmailTemplate(resetPasswordEmailTemplatePath, { resetUrl });
+    } catch (err) {
+      return next(new ErrorResponse(500));
+    }
+
+    try {
+      // sending email
+      const response = await sendOfficialEmail({
+        toEmail: email,
+        subject: "Reset your password now",
+        htmlContent
+      });
+    } catch (err) {
+      return next(new ErrorResponse(500));
+    }
+
+    // sending response to front
+    res.status(250).json({
+      success: true,
+      message: "Reset password link successfully send to " + email,
+    });
+  },
+
+  resetPassword: async (req, res, next) => {
+    const { token, password } = req.body;
+    let tokenData;
+    let hashPassword;
+
+    try {
+      // verifying jwt
+      tokenData = await verifyToken(token);
+    } catch (err) {
+      if(err.name == "TokenExpiredError") return next(new ErrorResponse(408, "Link expaired! Please try again"));//error from token verification
+      if(err.name == "JsonWebTokenError") return next(new ErrorResponse(401, "Invalid token! Please try again"));//error from token verification
+      return next(err);
+    }
+
+    try {
+      // hashing password
+      hashPassword = await bcrypt.hash(password, parseInt(process.env.HASH_SALT));
+    } catch (err) {
+      return next(err);
+    }
+
+    try {
+      // updating password
+      const { email } = tokenData;
+      const user = await updateUser({ email }, { password: hashPassword });
+    } catch (err) {
+      return next(err);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Password changed successfully"
+    })
+  }
 };

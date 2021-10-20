@@ -62,7 +62,7 @@ module.exports = {
       }
     }),
   
-  verifyToken: (token, secret) => 
+  verifyToken: (token, secret = process.env.JWT_SECRET_KEY) => 
     new Promise(async (resolve, reject) => {
       try {
         const payload = await jwt.verify(token, secret);
@@ -123,5 +123,12 @@ module.exports = {
         });
       })
       .catch(err => reject(new ErrorResponse(500)));
+    }),
+
+  updateUser: (match, data) => 
+    new Promise ((resolve, reject) => {
+      UserModel.findOneAndUpdate(match, data, { new: true }, (err, user) => {
+        err ? reject(err) : resolve(user);
+      });
     }),
 };
