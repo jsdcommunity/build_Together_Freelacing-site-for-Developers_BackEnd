@@ -30,7 +30,7 @@ const validateUserType = check("userType")
   .not()
   .isEmpty()
   .withMessage("User type cannot be empty!")
-  .isIn(["developer", "buyer"])
+  .isIn(["developer", "buyer", "both"])
   .withMessage("Invalid user type")
 
 module.exports = {
