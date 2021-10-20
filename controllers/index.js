@@ -1,5 +1,6 @@
 const ErrorResponse = require("../utils/ErrorResponse");
 const path = require("path");
+const bcrypt = require("bcrypt")
 const {
   checkUserExist,
   createToken,
@@ -92,6 +93,43 @@ module.exports = {
       success: true,
       token: loginToken,
       message: "Email confirmed successfully",
+    });
+  },
+
+  sendLoginToken: async (req,  res, next) => {
+    const { email, password } = req.body;
+    let userData;
+    let loginToken;
+
+    try {
+      // finding user in db
+      const { user, userExist } = await checkUserExist(email);
+      if(!userExist) throw new ErrorResponse(404, "There is no account associated with this email, Signup now");
+      userData = user;
+    } catch (err) {
+      return next(err);
+    }
+
+    try {
+      //if user exist comparing passwords
+      const result = await bcrypt.compare(password, userData.password);
+      if(!result) throw new ErrorResponse(401, "Invalid password!");
+    } catch (err) {
+      return next(err);
+    }
+
+    try {
+      // if passwords are same creating token
+      const { _id, userType, active } = userData;
+      loginToken = await createToken({_id, userType, active}, "18d");
+    } catch (err) {
+      return next(err);
+    }
+
+    res.status(200).json({
+      success: true,
+      token: loginToken,
+      message: "Logged in Successfully"
     });
   },
 };
