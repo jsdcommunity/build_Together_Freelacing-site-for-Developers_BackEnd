@@ -6,8 +6,8 @@
   "scripts": {
     "start": "SET NODE_ENV=production&node index.js",
     "dev": "SET NODE_ENV=development&nodemon index.js",
-    "prettier": "yarn prettier --write .",
-    "prettier-check" : "npx prettier --check ."
+    "format-code": "yarn prettier --write .",
+    "check-format" : "npx prettier --check ."
   },
   "author": "Ajmal Asharaf T",
   "license": "ISC",
