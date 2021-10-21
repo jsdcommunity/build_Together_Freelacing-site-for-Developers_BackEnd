@@ -1,7 +1,7 @@
 module.exports = (err, req, res, next) => {
   let { statusCode = 500, message = "Internal Server Error" } = err;
 
-  console.log(err);
+  console.error(err);
 
   if (statusCode == 500) message = "Internal Server Error";
 
