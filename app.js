@@ -4,7 +4,7 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const connectDatabase = require("./config/dataBase");
 const logger = require("morgan");
-const cors = require('cors');
+const cors = require("cors");
 
 app.use(cors());
 app.use(logger("dev"));
@@ -29,8 +29,8 @@ app.use("/api/v1/developer", developerRouter);
 app.use("/api/v1/buyer", buyerRouter);
 
 // Catching 404 requests and passing to errorHandler
-app.use((req, res, next)=> {
-    next(new ErrorResponse(404, "Not found"));
+app.use((req, res, next) => {
+   next(new ErrorResponse(404, "Not found"));
 });
 
 app.use(errorHandler);
