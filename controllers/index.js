@@ -92,7 +92,7 @@ module.exports = {
       } catch (err) {
          if (err.name == "TokenExpiredError")
             return next(
-               new ErrorResponse(408, "Link expaired! Please signup again")
+               new ErrorResponse(408, "Link expaired! Please sign up again")
             ); //error from token verification
          if (err.name == "JsonWebTokenError")
             return next(
@@ -120,7 +120,7 @@ module.exports = {
          if (!userExist)
             throw new ErrorResponse(
                404,
-               "There is no account associated with this email, Signup now"
+               "There is no account associated with this email, Sign up now"
             );
          userData = user;
       } catch (err) {
@@ -164,7 +164,7 @@ module.exports = {
          if (!userExist)
             throw new ErrorResponse(
                404,
-               "There is no account associated with this email, Signup now"
+               "There is no account associated with this email, Sign up now"
             );
       } catch (err) {
          return next(err);
@@ -217,7 +217,7 @@ module.exports = {
       } catch (err) {
          if (err.name == "TokenExpiredError")
             return next(
-               new ErrorResponse(408, "Link expaired! Please try again")
+               new ErrorResponse(410, "Link expired! Please try again")
             ); //error from token verification
          if (err.name == "JsonWebTokenError")
             return next(
