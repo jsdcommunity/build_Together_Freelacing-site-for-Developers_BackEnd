@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const { adminConroller } = require('../controllers/adminControllers');
+const { adminConroller } = require("../controllers/adminControllers");
 
-router.get('/', adminConroller)
+router.get("/", adminConroller);
 
 module.exports = router;

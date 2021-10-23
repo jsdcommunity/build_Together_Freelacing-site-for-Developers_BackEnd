@@ -21,10 +21,10 @@
 
 ## 📝 Table of Contents
 
-- [About](#about)
-- [Getting Started](#getting_started)
-- [Built Using](#built_using)
-- [Authors](#authors)
+-  [About](#about)
+-  [Getting Started](#getting_started)
+-  [Built Using](#built_using)
+-  [Authors](#authors)
 
 ## 🧐 About <a name = "about"></a>
 
@@ -55,6 +55,7 @@ apt install nodejs
 ```
 apt install npm
 ```
+
 4. Yarn
 
 ```
@@ -81,29 +82,29 @@ yarn install
 
 Run the server
 
-- In development mode.
+-  In development mode.
 
-  ```
-  yarn dev
-  ```
+   ```
+   yarn dev
+   ```
 
-- In production mode.
+-  In production mode.
 
-  ```
-  yarn start
-  ```
+   ```
+   yarn start
+   ```
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
-- [NodeJs](https://nodejs.org/en/) - A JavaScript runtime built on Chrome's V8 JavaScript engine.
-- [Express Js](https://expressjs.com/) - Fast and minimalist web framework for Node.js
-- [MongoDB](https://www.mongodb.com/) - MongoDB is a source-available cross-platform document-oriented database.
+-  [NodeJs](https://nodejs.org/en/) - A JavaScript runtime built on Chrome's V8 JavaScript engine.
+-  [Express Js](https://expressjs.com/) - Fast and minimalist web framework for Node.js
+-  [MongoDB](https://www.mongodb.com/) - MongoDB is a source-available cross-platform document-oriented database.
 
 ## ✍️ Authors <a name = "authors"></a>
 
-- [@Muhammed-Rahif](https://github.com/Muhammed-Rahif) - Contributor
-- [@shamilkotta](https://github.com/shamilkotta) - Contributor
-- [@ajeeshcp](https://github.com/ajeeshcp) - Contributor
-- [@fathimafarhath](https://github.com/fathimafarhath) - Contributor
+-  [@Muhammed-Rahif](https://github.com/Muhammed-Rahif) - Contributor
+-  [@shamilkotta](https://github.com/shamilkotta) - Contributor
+-  [@ajeeshcp](https://github.com/ajeeshcp) - Contributor
+-  [@fathimafarhath](https://github.com/fathimafarhath) - Contributor
 
 More details about [contributors here](https://github.com/jsdcommunity/build_Together_Freelacing-site-for-Developers_BackEnd/contributors).
