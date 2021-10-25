@@ -22,11 +22,12 @@ const buyerRouter = require("./routes/buyer");
 
 const ErrorResponse = require("./utils/ErrorResponse");
 const errorHandler = require("./middlewares/errorHandler");
+const { getUserAccess, getAdminAccess } = require("./middlewares");
 
 app.use("/api/v1", indexRouter);
-app.use("/api/v1/admin", adminRouter);
-app.use("/api/v1/developer", developerRouter);
-app.use("/api/v1/buyer", buyerRouter);
+app.use("/api/v1/admin", getAdminAccess, adminRouter);
+app.use("/api/v1/developer", getUserAccess, developerRouter);
+app.use("/api/v1/buyer", getUserAccess, buyerRouter);
 
 // Catching 404 requests and passing to errorHandler
 app.use((req, res, next) => {
