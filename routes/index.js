@@ -1,4 +1,5 @@
 const express = require("express");
+const { check } = require("express-validator");
 const router = express.Router();
 
 const {
@@ -7,16 +8,20 @@ const {
    sendLoginToken,
    sendResetPasswordToken,
    resetPassword,
+   updateUserProfile,
 } = require("../controllers");
+const { getUserAccess } = require("../middlewares");
 const {
    validationResults,
    validateToken,
+   validateAccess,
 } = require("../middlewares/validations");
 const {
    validateBasicUser,
    validateEmail,
    validatePassword,
    validateUserType,
+   validateUserFields,
 } = require("../middlewares/validations/userValidation");
 
 // Sign up user
@@ -50,5 +55,8 @@ router.post(
    validationResults,
    resetPassword
 );
+
+// Update user profile
+router.post("/update-user", getUserAccess, validateUserFields, validationResults, updateUserProfile);
 
 module.exports = router;
