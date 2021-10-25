@@ -249,4 +249,22 @@ module.exports = {
          message: "Password changed successfully",
       });
    },
+
+   updateUserProfile: async (req, res, next) => {
+      const id = req.user._id;
+      const data = req.validData;
+      data.active = true;
+
+      try {
+         // updating user profile data
+         const user = await updateUser({_id: id}, data);
+      } catch (err) {
+         return next(err);
+      }
+
+      res.status(200).json({
+         success: true,
+         message: "User profile updated",
+      })
+   }
 };
