@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
    skills: { type: Array, required: requiredForActiveDeveloper },
    projects: { type: Array, required: requiredForActiveDeveloper },
    experience: { type: Array, required: requiredForActiveDeveloper },
-   platform: { type: Array, required: requiredForActiveDeveloper },
+   domain: { type: Array, required: requiredForActiveDeveloper },
 });
 
 module.exports = mongoose.model("User", userSchema, "users");
