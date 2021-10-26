@@ -257,7 +257,7 @@ module.exports = {
 
       try {
          // updating user profile data
-         const user = await updateUser({_id: id}, data);
+         const user = await updateUser({ _id: id }, data);
       } catch (err) {
          return next(err);
       }
@@ -265,6 +265,6 @@ module.exports = {
       res.status(200).json({
          success: true,
          message: "User profile updated",
-      })
-   }
+      });
+   },
 };

@@ -42,7 +42,7 @@ const userFields = {
       },
       isLength: {
          errorMessage: "Full name must be 3 to 20 characters long",
-         options: [{min: 3}, {max: 20}],
+         options: [{ min: 3 }, { max: 20 }],
       },
       errorMessage: "Full name cannot be empty",
    },
@@ -67,7 +67,7 @@ const userFields = {
       notEmpty: {
          options: { ignore_whitespace: true },
       },
-      errorMessage: "Location can not be empty"
+      errorMessage: "Location can not be empty",
    },
    description: {
       isString: true,
@@ -76,29 +76,31 @@ const userFields = {
       },
       isLength: {
          errorMessage: "Description must be 20 to 250 characters long",
-         options: [ {min: 20}, {max: 250} ],
+         options: [{ min: 20 }, { max: 250 }],
       },
-      errorMessage: "Description cannot be empty"
+      errorMessage: "Description cannot be empty",
    },
    mobileNum: {
       trim: true,
       isInt: true,
       isMobilePhone: true,
-      optional: { //Making this field optional
-         options: { checkFalsy: true, } //If the input value is null/undifined/false/empty/white space then ignoring the field
+      optional: {
+         //Making this field optional
+         options: { checkFalsy: true }, //If the input value is null/undifined/false/empty/white space then ignoring the field
       },
-      errorMessage: "Enter valid mobile number"
+      errorMessage: "Enter valid mobile number",
    },
    socialMedias: {
       optional: {
-         options: { checkFalsy: true, }
+         options: { checkFalsy: true },
       },
       custom: {
-         options: (value) => Array.isArray(value)
+         options: value => Array.isArray(value),
       },
       errorMessage: "Please enter valid social media urls",
    },
-   'socialMedias.*': { //checking for every element in array of input
+   "socialMedias.*": {
+      //checking for every element in array of input
       trim: true,
       isString: true,
       notEmpty: {
@@ -113,18 +115,18 @@ const userFields = {
          },
       },
       errorMessage: "Please provide valid social media urls",
-
    },
    skills: {
       optional: {
-         options: { checkFalsy: true, }
+         options: { checkFalsy: true },
       },
-      custom: {//custom validation
-         options: (value) => Array.isArray(value) && value.length //checking for input value is array and array contains elements
+      custom: {
+         //custom validation
+         options: value => Array.isArray(value) && value.length, //checking for input value is array and array contains elements
       },
       errorMessage: "Skills cannot be empty",
    },
-   'skills.*': {
+   "skills.*": {
       trim: true,
       isString: true,
       notEmpty: {
@@ -134,14 +136,14 @@ const userFields = {
    },
    projects: {
       optional: {
-         options: { checkFalsy: true, }
+         options: { checkFalsy: true },
       },
       custom: {
-         options: (value) => Array.isArray(value) && value.length
+         options: value => Array.isArray(value) && value.length,
       },
       errorMessage: "Projects cannot be empty",
    },
-   'projects.*': {
+   "projects.*": {
       trim: true,
       isString: true,
       notEmpty: {
@@ -159,14 +161,14 @@ const userFields = {
    },
    experience: {
       optional: {
-         options: { checkFalsy: true, }
+         options: { checkFalsy: true },
       },
       custom: {
-         options: (value) => Array.isArray(value) && value.length
+         options: value => Array.isArray(value) && value.length,
       },
       errorMessage: "Experiences cannot be empty",
    },
-   'experience.*': {
+   "experience.*": {
       trim: true,
       isString: true,
       notEmpty: {
@@ -176,14 +178,14 @@ const userFields = {
    },
    domain: {
       optional: {
-         options: { checkFalsy: true, }
+         options: { checkFalsy: true },
       },
       custom: {
-         options: (value) => Array.isArray(value) && value.length
+         options: value => Array.isArray(value) && value.length,
       },
       errorMessage: "Domain cannot be empty",
    },
-   'domain.*': {
+   "domain.*": {
       trim: true,
       isString: true,
       notEmpty: {

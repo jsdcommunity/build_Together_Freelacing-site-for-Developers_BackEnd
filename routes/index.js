@@ -57,6 +57,12 @@ router.post(
 );
 
 // Update user profile
-router.post("/update-user", getUserAccess, validateUserFields, validationResults, updateUserProfile);
+router.post(
+   "/update-user",
+   getUserAccess,
+   validateUserFields,
+   validationResults,
+   updateUserProfile
+);
 
 module.exports = router;
