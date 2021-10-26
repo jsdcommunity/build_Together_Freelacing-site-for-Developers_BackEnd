@@ -200,5 +200,5 @@ module.exports = {
    validatePassword,
    validateUserType,
    validateBasicUser: [validateEmail, validatePassword],
-   validateUserFields: [checkSchema(userFields)],
+   validateUserFields: checkSchema(userFields),
 };
