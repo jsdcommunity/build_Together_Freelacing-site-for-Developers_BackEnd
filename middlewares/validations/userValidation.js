@@ -68,6 +68,10 @@ const userFields = {
          options: { ignore_whitespace: true },
       },
       errorMessage: "Location can not be empty",
+      isLength: {
+            errorMessage: "Location must be 2 to 38 characters long",
+            options: [{ min: 2 }, { max: 38 }],
+      },
    },
    description: {
       isString: true,
