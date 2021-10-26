@@ -92,7 +92,7 @@ module.exports = {
       } catch (err) {
          if (err.name == "TokenExpiredError")
             return next(
-               new ErrorResponse(408, "Link expaired! Please sign up again")
+               new ErrorResponse(408, "Link expired! Please sign up again")
             ); //error from token verification
          if (err.name == "JsonWebTokenError")
             return next(
