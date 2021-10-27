@@ -81,7 +81,7 @@ module.exports = {
          // check for duplicate confirmation link
          const { userExist } = await checkUserExist(tokenData.email);
          if (userExist)
-            throw new ErrorResponse(409, "Email already confirmed! try login");
+            throw new ErrorResponse(409, "Email already confirmed!");
 
          // creating new user
          const newUser = await createUser(tokenData);
@@ -91,13 +91,9 @@ module.exports = {
          loginToken = await createToken({ _id, userType, active }, "18d");
       } catch (err) {
          if (err.name == "TokenExpiredError")
-            return next(
-               new ErrorResponse(408, "Link expired! Please sign up again")
-            ); //error from token verification
+            return next(new ErrorResponse(408, "Link expired!")); //error from token verification
          if (err.name == "JsonWebTokenError")
-            return next(
-               new ErrorResponse(401, "Invalid token! Please try again")
-            ); //error from token verification
+            return next(new ErrorResponse(401, "Invalid token!")); //error from token verification
          return next(err);
       }
 
@@ -105,7 +101,7 @@ module.exports = {
       res.status(201).json({
          success: true,
          token: loginToken,
-         message: "Email confirmed successfully",
+         message: "Email confirmed successfully!",
       });
    },
 
