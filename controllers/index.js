@@ -91,7 +91,7 @@ module.exports = {
          loginToken = await createToken({ _id, userType, active }, "18d");
       } catch (err) {
          if (err.name == "TokenExpiredError")
-            return next(new ErrorResponse(408, "Link expired!")); //error from token verification
+            return next(new ErrorResponse(410, "Link expired!")); //error from token verification
          if (err.name == "JsonWebTokenError")
             return next(new ErrorResponse(401, "Invalid token!")); //error from token verification
          return next(err);
