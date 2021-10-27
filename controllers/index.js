@@ -92,7 +92,7 @@ module.exports = {
       } catch (err) {
          if (err.name == "TokenExpiredError")
             return next(
-               new ErrorResponse(408, "Link expaired! Please sign up again")
+               new ErrorResponse(408, "Link expired! Please sign up again")
             ); //error from token verification
          if (err.name == "JsonWebTokenError")
             return next(
@@ -247,6 +247,24 @@ module.exports = {
       res.status(200).json({
          success: true,
          message: "Password changed successfully",
+      });
+   },
+
+   updateUserProfile: async (req, res, next) => {
+      const id = req.user._id;
+      const data = req.validData;
+      data.active = true;
+
+      try {
+         // updating user profile data
+         const user = await updateUser({ _id: id }, data);
+      } catch (err) {
+         return next(err);
+      }
+
+      res.status(200).json({
+         success: true,
+         message: "User profile updated",
       });
    },
 };

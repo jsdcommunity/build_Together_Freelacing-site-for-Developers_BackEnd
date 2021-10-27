@@ -1,4 +1,4 @@
-const { check, validationResult } = require("express-validator");
+const { check, checkSchema } = require("express-validator");
 
 const validateEmail = check("email")
    .trim()
@@ -33,9 +33,176 @@ const validateUserType = check("userType")
    .isIn(["developer", "buyer", "both"])
    .withMessage("Invalid user type");
 
+const userFields = {
+   fullName: {
+      trim: true,
+      isString: true,
+      notEmpty: {
+         options: { ignore_whitespace: true },
+      },
+      isLength: {
+         errorMessage: "Full name must be 3 to 20 characters long",
+         options: [{ min: 3 }, { max: 20 }],
+      },
+      errorMessage: "Full name cannot be empty",
+   },
+   profileImageUrl: {
+      trim: true,
+      isString: true,
+      notEmpty: {
+         options: { ignore_whitespace: true },
+      },
+      isURL: {
+         errorMessage: "Invalid profile image url",
+         options: {
+            protocols: ["https"],
+            require_protocol: false,
+            require_valid_protocol: true,
+         },
+      },
+      errorMessage: "Please upload profile image",
+   },
+   location: {
+      isString: true,
+      notEmpty: {
+         options: { ignore_whitespace: true },
+      },
+      isLength: {
+            errorMessage: "Location must be 2 to 38 characters long",
+            options: [{ min: 2 }, { max: 38 }],
+      },
+      errorMessage: "Location can not be empty",
+   },
+   description: {
+      isString: true,
+      notEmpty: {
+         options: { ignore_whitespace: true },
+      },
+      isLength: {
+         errorMessage: "Description must be 20 to 250 characters long",
+         options: [{ min: 20 }, { max: 250 }],
+      },
+      errorMessage: "Description cannot be empty",
+   },
+   mobileNum: {
+      trim: true,
+      isInt: true,
+      isMobilePhone: true,
+      optional: {
+         //Making this field optional
+         options: { checkFalsy: true }, //If the input value is null/undifined/false/empty/white space then ignoring the field
+      },
+      errorMessage: "Enter valid mobile number",
+   },
+   socialMedias: {
+      optional: {
+         options: { checkFalsy: true },
+      },
+      custom: {
+         options: value => Array.isArray(value),
+      },
+      errorMessage: "Please enter valid social media urls",
+   },
+   "socialMedias.*": {
+      //checking for every element in array of input
+      trim: true,
+      isString: true,
+      notEmpty: {
+         options: { ignore_whitespace: true },
+      },
+      isURL: {
+         errorMessage: "Invalid social media url",
+         options: {
+            protocols: ["https"],
+            require_protocol: false,
+            require_valid_protocol: true,
+         },
+      },
+      errorMessage: "Please provide valid social media urls",
+   },
+   skills: {
+      optional: {
+         options: { checkFalsy: true },
+      },
+      custom: {
+         //custom validation
+         options: value => Array.isArray(value) && value.length, //checking for input value is array and array contains elements
+      },
+      errorMessage: "Skills cannot be empty",
+   },
+   "skills.*": {
+      trim: true,
+      isString: true,
+      notEmpty: {
+         options: { ignore_whitespace: true },
+      },
+      errorMessage: "Please enter valid skills",
+   },
+   projects: {
+      optional: {
+         options: { checkFalsy: true },
+      },
+      custom: {
+         options: value => Array.isArray(value) && value.length,
+      },
+      errorMessage: "Projects cannot be empty",
+   },
+   "projects.*": {
+      trim: true,
+      isString: true,
+      notEmpty: {
+         options: { ignore_whitespace: true },
+      },
+      isURL: {
+         errorMessage: "Invalid project url",
+         options: {
+            protocols: ["https"],
+            require_protocol: false,
+            require_valid_protocol: true,
+         },
+      },
+      errorMessage: "Please enter valid project url",
+   },
+   experience: {
+      optional: {
+         options: { checkFalsy: true },
+      },
+      custom: {
+         options: value => Array.isArray(value) && value.length,
+      },
+      errorMessage: "Experiences cannot be empty",
+   },
+   "experience.*": {
+      trim: true,
+      isString: true,
+      notEmpty: {
+         options: { ignore_whitespace: true },
+      },
+      errorMessage: "Please enter valid experience",
+   },
+   domain: {
+      optional: {
+         options: { checkFalsy: true },
+      },
+      custom: {
+         options: value => Array.isArray(value) && value.length,
+      },
+      errorMessage: "Domain cannot be empty",
+   },
+   "domain.*": {
+      trim: true,
+      isString: true,
+      notEmpty: {
+         options: { ignore_whitespace: true },
+      },
+      errorMessage: "Please enter valid domain",
+   },
+};
+
 module.exports = {
    validateEmail,
    validatePassword,
    validateUserType,
    validateBasicUser: [validateEmail, validatePassword],
+   validateUserFields: checkSchema(userFields),
 };
