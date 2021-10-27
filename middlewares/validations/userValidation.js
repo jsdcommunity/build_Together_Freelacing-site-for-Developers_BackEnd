@@ -11,8 +11,8 @@ const validateEmail = check("email")
    .bail()
    .isLength({ min: 3 })
    .withMessage("Minimum 3 characters required!")
-   .isLength({ max: 30 })
-   .withMessage("Maximum 30 characters only!");
+   .isLength({ max: 254 })
+   .withMessage("Maximum 254 characters only!");
 
 const validatePassword = check("password")
    .not()
@@ -68,8 +68,8 @@ const userFields = {
          options: { ignore_whitespace: true },
       },
       isLength: {
-            errorMessage: "Location must be 2 to 38 characters long",
-            options: [{ min: 2 }, { max: 38 }],
+         errorMessage: "Location must be 2 to 38 characters long",
+         options: [{ min: 2 }, { max: 38 }],
       },
       errorMessage: "Location can not be empty",
    },

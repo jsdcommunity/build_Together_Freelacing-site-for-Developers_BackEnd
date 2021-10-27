@@ -10,5 +10,5 @@ module.exports = {
       next();
    },
 
-   validateToken: [check("token").isJWT().withMessage("Invalid token!")],
+   validateToken: check("token").isJWT().withMessage("Invalid token!"),
 };
