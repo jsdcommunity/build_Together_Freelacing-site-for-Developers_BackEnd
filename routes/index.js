@@ -1,5 +1,4 @@
 const express = require("express");
-const { check } = require("express-validator");
 const router = express.Router();
 
 const {
@@ -9,12 +8,12 @@ const {
    sendResetPasswordToken,
    resetPassword,
    updateUserProfile,
+   getUser,
 } = require("../controllers");
 const { getUserAccess } = require("../middlewares");
 const {
    validationResults,
    validateToken,
-   validateAccess,
 } = require("../middlewares/validations");
 const {
    validateBasicUser,
@@ -64,5 +63,8 @@ router.put(
    validationResults,
    updateUserProfile
 );
+
+// Get user data
+router.get("/get-user/:id", getUser);
 
 module.exports = router;
