@@ -57,7 +57,7 @@ router.post(
 );
 
 // Update user profile
-router.post(
+router.put(
    "/update-user",
    getUserAccess,
    validateUserFields,
