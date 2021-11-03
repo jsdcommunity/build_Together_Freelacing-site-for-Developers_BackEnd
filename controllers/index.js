@@ -88,7 +88,7 @@ module.exports = {
 
          // creating new login token
          const { _id, userType, active } = newUser;
-         loginToken = await createToken({ _id, userType, active }, "18d");
+         loginToken = await createToken({ userId: _id, userType, active }, "18d");
       } catch (err) {
          if (err.name == "TokenExpiredError")
             return next(new ErrorResponse(410, "Link expired!")); //error from token verification
@@ -134,7 +134,7 @@ module.exports = {
       try {
          // if passwords are same creating token
          const { _id, userType, active } = userData;
-         loginToken = await createToken({ _id, userType, active }, "18d");
+         loginToken = await createToken({ userId: _id, userType, active }, "18d");
       } catch (err) {
          return next(err);
       }
@@ -262,7 +262,7 @@ module.exports = {
       try {
          // creating new updated login token
          const { _id, userType, active } = newUser;
-         token = await createToken({ _id, userType, active }, "18d");
+         token = await createToken({ userId: _id, userType, active }, "18d");
       } catch (err) {
          return next(err);
       }
