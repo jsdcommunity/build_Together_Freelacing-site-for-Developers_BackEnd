@@ -11,6 +11,7 @@ const {
    updateUser,
    getUserData,
 } = require("../helpers");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 module.exports = {
    sendConfirmEmailToken: async (req, res, next) => {
@@ -89,7 +90,10 @@ module.exports = {
 
          // creating new login token
          const { _id, userType, active } = newUser;
-         loginToken = await createToken({ userId: _id, userType, active }, "18d");
+         loginToken = await createToken(
+            { userId: _id, userType, active },
+            "18d"
+         );
       } catch (err) {
          if (err.name == "TokenExpiredError")
             return next(new ErrorResponse(410, "Link expired!")); //error from token verification
@@ -135,7 +139,10 @@ module.exports = {
       try {
          // if passwords are same creating token
          const { _id, userType, active } = userData;
-         loginToken = await createToken({ userId: _id, userType, active }, "18d");
+         loginToken = await createToken(
+            { userId: _id, userType, active },
+            "18d"
+         );
       } catch (err) {
          return next(err);
       }
@@ -278,10 +285,13 @@ module.exports = {
    getUser: async (req, res, next) => {
       const id = req.params.id;
       let user;
-      
+
+      if (!ObjectId.isValid(id))
+         return next(new ErrorResponse(400, "User id is not valid!"));
+
       try {
          user = await getUserData(id);
-         if(!user) return next(new ErrorResponse(404, "User Not found"))
+         if (!user) return next(new ErrorResponse(404, "User Not found"));
       } catch (err) {
          return next(err);
       }
