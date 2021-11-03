@@ -88,7 +88,7 @@ module.exports = {
 
          // creating new login token
          const { _id, userType, active } = newUser;
-         loginToken = await createToken({ _id, userType, active }, "18d");
+         loginToken = await createToken({ userId: _id, userType, active }, "18d");
       } catch (err) {
          if (err.name == "TokenExpiredError")
             return next(new ErrorResponse(410, "Link expired!")); //error from token verification
@@ -134,7 +134,7 @@ module.exports = {
       try {
          // if passwords are same creating token
          const { _id, userType, active } = userData;
-         loginToken = await createToken({ _id, userType, active }, "18d");
+         loginToken = await createToken({ userId: _id, userType, active }, "18d");
       } catch (err) {
          return next(err);
       }
@@ -247,19 +247,29 @@ module.exports = {
    },
 
    updateUserProfile: async (req, res, next) => {
-      const id = req.user._id;
+      const id = req.user.userId;
       const data = req.validData;
       data.active = true;
+      let newUser, token;
 
       try {
          // updating user profile data
-         const user = await updateUser({ _id: id }, data);
+         newUser = await updateUser({ _id: id }, data);
+      } catch (err) {
+         return next(err);
+      }
+
+      try {
+         // creating new updated login token
+         const { _id, userType, active } = newUser;
+         token = await createToken({ userId: _id, userType, active }, "18d");
       } catch (err) {
          return next(err);
       }
 
       res.status(200).json({
          success: true,
+         token,
          message: "User profile updated",
       });
    },

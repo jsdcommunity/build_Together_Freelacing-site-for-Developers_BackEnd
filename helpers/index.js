@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const handlebars = require("handlebars");
 const nodemailer = require("nodemailer");
 const UserModel = require("../models/user");
+const ErrorResponse = require("../utils/ErrorResponse");
 
 // Creating a instance for nodemailer transporter using official upbit email
 const transporter = nodemailer.createTransport({
@@ -129,6 +130,7 @@ module.exports = {
    updateUser: (match, data) =>
       new Promise((resolve, reject) => {
          UserModel.findOneAndUpdate(match, data, { new: true }, (err, user) => {
+            if(!user && !err) reject(new ErrorResponse(404, "User not found to update user profile, try login again"));
             err ? reject(err) : resolve(user);
          });
       }),

@@ -49,8 +49,8 @@ const userFields = {
    profileImageUrl: {
       trim: true,
       isString: true,
-      notEmpty: {
-         options: { ignore_whitespace: true },
+      optional: {
+         options: { checkFalsy: true },
       },
       isURL: {
          errorMessage: "Invalid profile image url",
