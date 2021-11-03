@@ -134,4 +134,13 @@ module.exports = {
             err ? reject(err) : resolve(user);
          });
       }),
+
+   getUserData: (id) => 
+      new Promise((resolve, reject) => {
+         UserModel.findById(id, "-password")
+            .then(user => {
+               user ? resolve(user) : reject(new ErrorResponse(404, "User not found"));
+            })
+            .catch(err => reject(err));
+      }),
 };

@@ -9,6 +9,7 @@ const {
    verifyToken,
    createUser,
    updateUser,
+   getUserData,
 } = require("../helpers");
 
 module.exports = {
@@ -271,6 +272,22 @@ module.exports = {
          success: true,
          token,
          message: "User profile updated",
+      });
+   },
+
+   getUser: async (req, res, next) => {
+      const id = req.params.id;
+      let user;
+      
+      try {
+         user = await getUserData(id);
+      } catch (err) {
+         return next(new ErrorResponse(404, "User Not found"));
+      }
+
+      res.status(200).json({
+         success: true,
+         user,
       });
    },
 };
