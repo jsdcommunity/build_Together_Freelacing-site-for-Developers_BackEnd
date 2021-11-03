@@ -250,16 +250,26 @@ module.exports = {
       const id = req.user._id;
       const data = req.validData;
       data.active = true;
+      let newUser, token;
 
       try {
          // updating user profile data
-         const user = await updateUser({ _id: id }, data);
+         newUser = await updateUser({ _id: id }, data);
+      } catch (err) {
+         return next(err);
+      }
+
+      try {
+         // creating new updated login token
+         const { _id, userType, active } = newUser;
+         token = await createToken({ _id, userType, active }, "18d");
       } catch (err) {
          return next(err);
       }
 
       res.status(200).json({
          success: true,
+         token,
          message: "User profile updated",
       });
    },
