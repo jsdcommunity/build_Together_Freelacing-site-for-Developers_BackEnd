@@ -94,6 +94,20 @@ Run the server
    yarn start
    ```
 
+### Available commands to development
+
+-  Check if any files need to be formatted ( using `prettier` )
+
+```sh
+   yarn check-format
+```
+
+-  To format all required files ( using `prettier` )
+
+```sh
+   yarn format-code
+```
+
 ## ⛏️ Built Using <a name = "built_using"></a>
 
 -  [NodeJs](https://nodejs.org/en/) - A JavaScript runtime built on Chrome's V8 JavaScript engine.
