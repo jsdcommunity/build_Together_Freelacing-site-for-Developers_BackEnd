@@ -247,7 +247,7 @@ module.exports = {
    },
 
    updateUserProfile: async (req, res, next) => {
-      const id = req.user._id;
+      const id = req.user.userId;
       const data = req.validData;
       data.active = true;
       let newUser, token;
