@@ -130,17 +130,25 @@ module.exports = {
    updateUser: (match, data) =>
       new Promise((resolve, reject) => {
          UserModel.findOneAndUpdate(match, data, { new: true }, (err, user) => {
-            if(!user && !err) reject(new ErrorResponse(404, "User not found to update user profile, try login again"));
+            if (!user && !err)
+               reject(
+                  new ErrorResponse(
+                     404,
+                     "User not found to update user profile, try login again"
+                  )
+               );
             err ? reject(err) : resolve(user);
          });
       }),
 
-   getUserData: (id) => 
+   getUserData: id =>
       new Promise((resolve, reject) => {
          UserModel.findById(id, "-password")
-            .then(user => {
-               user ? resolve(user) : reject(new ErrorResponse(404, "User not found"));
-            })
+            .then(user =>
+               user
+                  ? resolve(user)
+                  : reject(new ErrorResponse(404, "User not found"))
+            )
             .catch(err => reject(err));
       }),
 };

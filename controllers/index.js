@@ -281,8 +281,9 @@ module.exports = {
       
       try {
          user = await getUserData(id);
+         if(!user) return next(new ErrorResponse(404, "User Not found"))
       } catch (err) {
-         return next(new ErrorResponse(404, "User Not found"));
+         return next(err);
       }
 
       res.status(200).json({
