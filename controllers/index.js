@@ -11,6 +11,7 @@ const {
    updateUser,
    getUserData,
 } = require("../helpers");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 module.exports = {
    sendConfirmEmailToken: async (req, res, next) => {
@@ -285,9 +286,11 @@ module.exports = {
       const id = req.params.id;
       let user;
 
+      if (!ObjectId.isValid(id))
+         return next(new ErrorResponse(400, "User id is not valid!"));
+
       try {
          user = await getUserData(id);
-         if (!user) return next(new ErrorResponse(404, "User Not found"));
       } catch (err) {
          return next(err);
       }
