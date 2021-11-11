@@ -1,8 +1,13 @@
 const express = require("express");
 const router = express.Router();
 
-const { buyerController } = require("../controllers/buyerControllers");
+const {} = require("../controllers/buyerControllers");
+const validateJobFields = require("../middlewares/validations/jobValidation");
+const { validationResults } = require("../middlewares/validations");
 
-router.get("/", buyerController);
+// Create a job requirement
+router.post("/create-job", validateJobFields, validationResults, (req, res) => {
+   res.send("validation success");
+});
 
 module.exports = router;
