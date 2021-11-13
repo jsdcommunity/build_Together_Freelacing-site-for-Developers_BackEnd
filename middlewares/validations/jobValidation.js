@@ -22,13 +22,6 @@ const validateDescription = check("description")
    .isString()
    .withMessage("Description must be string!");
 
-const validateAuthorId = check("authorId")
-   .not()
-   .isEmpty()
-   .withMessage("Author id cannot be empty!")
-   .isMongoId()
-   .withMessage("Invalid author id!");
-
 const validateBudget = check("budget")
    .not()
    .isEmpty()
@@ -54,7 +47,6 @@ const validateDomain = check("domain")
 const validateJobFields = [
    validateTitle,
    validateDescription,
-   validateAuthorId,
    validateBudget,
    validateDomain,
 ];
@@ -63,6 +55,5 @@ module.exports = validateJobFields;
 
 module.exports.validateTitle = validateTitle;
 module.exports.validateDescription = validateDescription;
-module.exports.validateAuthorId = validateAuthorId;
 module.exports.validateBudget = validateBudget;
 module.exports.validateDomain = validateDomain;
