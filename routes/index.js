@@ -9,6 +9,7 @@ const {
    resetPassword,
    updateUserProfile,
    getUser,
+   getJobs,
 } = require("../controllers");
 const { getUserAccess } = require("../middlewares");
 const {
@@ -66,5 +67,8 @@ router.put(
 
 // Get user data
 router.get("/get-user/:id", getUser);
+
+// Get job requirements
+router.get("/get-jobs", getJobs);
 
 module.exports = router;

@@ -10,6 +10,7 @@ const {
    createUser,
    updateUser,
    getUserData,
+   getJobsData,
 } = require("../helpers");
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -298,6 +299,26 @@ module.exports = {
       res.status(200).json({
          success: true,
          user,
+      });
+   },
+
+   getJobs: async (req, res, next) => {
+      let jobs;
+      let { page = 1, count = 12 } = req.query;
+
+      try {
+         jobs = await getJobsData();
+         page--;
+         let startingIndx = page * count;
+
+         jobs = jobs.splice(startingIndx, count);
+      } catch (err) {
+         return next(err);
+      }
+
+      res.status(200).json({
+         success: true,
+         jobs,
       });
    },
 };

@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const handlebars = require("handlebars");
 const nodemailer = require("nodemailer");
 const UserModel = require("../models/user");
+const JobModel = require("../models/job");
 const ErrorResponse = require("../utils/ErrorResponse");
 
 // Creating a instance for nodemailer transporter using official upbit email
@@ -149,6 +150,14 @@ module.exports = {
                   ? resolve(user)
                   : reject(new ErrorResponse(404, "User not found"))
             )
-            .catch(err => reject(err));
+            .catch(reject);
+      }),
+   getJobsData: () =>
+      new Promise((resolve, reject) => {
+         JobModel.find()
+            .then(jobs => {
+               resolve(jobs);
+            })
+            .catch(reject);
       }),
 };
