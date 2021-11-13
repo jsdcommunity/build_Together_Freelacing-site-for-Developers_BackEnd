@@ -17,8 +17,8 @@ const validateDescription = check("description")
    .withMessage("Description cannot be empty!")
    .isLength({ min: 20 })
    .withMessage("Description must be at least 20 characters long!")
-   .isLength({ max: 250 })
-   .withMessage("Description must be a maximum of 250 characters!")
+   .isLength({ max: 750 })
+   .withMessage("Description must be a maximum of 750 characters!")
    .isString()
    .withMessage("Description must be string!");
 
@@ -44,11 +44,23 @@ const validateDomain = check("domain")
    .isString()
    .withMessage("Domain must be string!");
 
+const validateLabels = check("labels")
+   .not()
+   .isEmpty()
+   .withMessage("Labels cannot be empty!")
+   .isArray()
+   .withMessage("Labels must be array!")
+   .isLength({ min: 1 })
+   .withMessage("Add atleast one label.")
+   .isLength({ max: 8 })
+   .withMessage("Maximum 8 labels allowed!");
+
 const validateJobFields = [
    validateTitle,
    validateDescription,
    validateBudget,
    validateDomain,
+   validateLabels,
 ];
 
 module.exports = validateJobFields;
