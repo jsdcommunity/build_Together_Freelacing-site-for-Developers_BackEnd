@@ -154,7 +154,29 @@ module.exports = {
       }),
    getJobsData: () =>
       new Promise((resolve, reject) => {
-         JobModel.find()
+         JobModel.aggregate([
+            {
+               $lookup: {
+                  from: "users",
+                  localField: "authorId",
+                  foreignField: "_id",
+                  as: "userData",
+               },
+            },
+            {
+               $addFields: {
+                  user: "$userData.fullName",
+               },
+            },
+            {
+               $unwind: "$user",
+            },
+            {
+               $project: {
+                  userData: 0,
+               },
+            },
+         ])
             .then(jobs => {
                resolve(jobs);
             })
