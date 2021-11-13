@@ -164,16 +164,20 @@ module.exports = {
                },
             },
             {
-               $addFields: {
-                  user: "$userData.fullName",
-               },
-            },
-            {
-               $unwind: "$user",
+               $unwind: "$userData",
             },
             {
                $project: {
-                  userData: 0,
+                  authorId: 1,
+                  title: 1,
+                  description: 1,
+                  createdAt: 1,
+                  budget: 1,
+                  labels: 1,
+                  domain: 1,
+                  "userData._id": 1,
+                  "userData.profileImageUrl": 1,
+                  "userData.fullName": 1,
                },
             },
          ])
