@@ -29,15 +29,15 @@ const readHTMLFile = function (path, callback) {
 };
 
 module.exports = {
-   checkUserExist: email =>
+   checkUserExist: query =>
       new Promise((resolve, reject) => {
-         UserModel.findOne({ email: email })
+         UserModel.findOne(query)
             .then(userExist => {
                if (Boolean(userExist))
                   resolve({
                      user: userExist,
                      userExist: true,
-                     message: "This user email is already exist",
+                     message: "This user is already exist",
                   });
                else
                   resolve({

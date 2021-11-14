@@ -28,10 +28,10 @@ module.exports = {
 
       // Checking if user exist
       try {
-         let { userExist, message } = await checkUserExist(email);
+         let { userExist, message } = await checkUserExist({ email });
          if (userExist) return next(new ErrorResponse(409, message));
       } catch (err) {
-         next(new ErrorResponse(401, err.message));
+         return next(new ErrorResponse(401, err.message));
       }
 
       // Generating new token for sending with confirm url
@@ -82,7 +82,7 @@ module.exports = {
          const tokenData = await verifyToken(token);
 
          // check for duplicate confirmation link
-         const { userExist } = await checkUserExist(tokenData.email);
+         const { userExist } = await checkUserExist({ email: tokenData.email });
          if (userExist)
             throw new ErrorResponse(409, "Email already confirmed!");
 
@@ -118,7 +118,7 @@ module.exports = {
 
       try {
          // finding user in db
-         const { user, userExist } = await checkUserExist(email);
+         const { user, userExist } = await checkUserExist({ email });
          if (!userExist)
             throw new ErrorResponse(
                404,
@@ -165,7 +165,7 @@ module.exports = {
 
       try {
          // check if user exists with giver email
-         const { userExist } = await checkUserExist(email);
+         const { userExist } = await checkUserExist({ email });
          if (!userExist)
             throw new ErrorResponse(
                404,
