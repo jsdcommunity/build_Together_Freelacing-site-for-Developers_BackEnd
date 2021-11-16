@@ -170,6 +170,7 @@ module.exports = {
                $project: {
                   authorId: 1,
                   title: 1,
+                  shortDescription: 1,
                   description: 1,
                   createdAt: 1,
                   budget: 1,

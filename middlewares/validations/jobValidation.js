@@ -11,12 +11,23 @@ const validateTitle = check("title")
    .isString()
    .withMessage("Title must be string!");
 
+const validateShortDescription = check("shortDescription")
+   .not()
+   .isEmpty()
+   .withMessage("Short Description cannot be empty!")
+   .isLength({ min: 20 })
+   .withMessage("Short Description must be at least 20 characters long!")
+   .isLength({ max: 200 })
+   .withMessage("Short Description must be a maximum of 200 characters!")
+   .isString()
+   .withMessage("Short Description must be string!");
+
 const validateDescription = check("description")
    .not()
    .isEmpty()
    .withMessage("Description cannot be empty!")
-   .isLength({ min: 20 })
-   .withMessage("Description must be at least 20 characters long!")
+   .isLength({ min: 50 })
+   .withMessage("Description must be at least 50 characters long!")
    .isLength({ max: 750 })
    .withMessage("Description must be a maximum of 750 characters!")
    .isString()
@@ -25,18 +36,18 @@ const validateDescription = check("description")
 const validateBudget = check("budget")
    .not()
    .isEmpty()
-   .withMessage("Budget id cannot be empty!")
+   .withMessage("Budget cannot be empty!")
    .isNumeric()
    .withMessage("Budget isn't a numeric value!")
-   .isLength({ min: 1 })
-   .withMessage("Budget must be at least 1 characters long!")
+   .isLength({ min: 2 })
+   .withMessage("Budget must be at least 2 digit long!")
    .isLength({ max: 10 })
-   .withMessage("Budget must be a maximum of 10 characters!");
+   .withMessage("Budget must be a maximum of 10 digits!");
 
 const validateDomain = check("domain")
    .not()
    .isEmpty()
-   .withMessage("Domain id cannot be empty!")
+   .withMessage("Domain cannot be empty!")
    .isLength({ min: 1 })
    .withMessage("Domain must be at least 1 characters long!")
    .isLength({ max: 32 })
@@ -61,6 +72,7 @@ const validateJobFields = [
    validateBudget,
    validateDomain,
    validateLabels,
+   validateShortDescription,
 ];
 
 module.exports = validateJobFields;
