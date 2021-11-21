@@ -1,5 +1,13 @@
+const ProposalModel = require("../models/proposal");
+
 module.exports = {
-   foo: (bar1, bar2) => {
-      // some code here
-   },
+   createProposal: proposalData =>
+      new Promise((resolve, reject) => {
+         new Promise((resolve, reject) => {
+            const proposal = new ProposalModel(proposalData);
+            proposal.save((err, newProposal) => {
+               err ? reject(err) : resolve(newProposal);
+            });
+         });
+      }),
 };
