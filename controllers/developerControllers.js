@@ -38,7 +38,7 @@ module.exports = {
 
       // Creating job requirement
       try {
-         const { _id } = createProposal(proposalData);
+         const { _id } = await createProposal(proposalData);
          proposalId = _id;
       } catch (err) {
          return next(err);
