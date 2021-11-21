@@ -2,12 +2,21 @@ const { checkSchema } = require("express-validator");
 
 const validateProposal = checkSchema({
    jobId: {
+      trim: true,
+      notEmpty: {
+         options: { ignore_whitespace: true },
+      },
       isMongoId: {
          errorMessage: "Job id must be a valid id.",
          bail: true,
       },
+      errorMessage: "Job id cannot be empty",
    },
    amount: {
+      trim: true,
+      notEmpty: {
+         options: { ignore_whitespace: true },
+      },
       isNumeric: {
          errorMessage: "Amount must be a numric value.",
       },
@@ -18,8 +27,13 @@ const validateProposal = checkSchema({
          },
          errorMessage: "Amount must be a 2-10 digit number.",
       },
+      errorMessage: "Amount cannot be empty",
    },
    duration: {
+      trim: true,
+      notEmpty: {
+         options: { ignore_whitespace: true },
+      },
       isString: {
          errorMessage: "Duration must be a string.",
       },
@@ -30,8 +44,13 @@ const validateProposal = checkSchema({
          },
          errorMessage: "Duration must be 2-8 characters long.",
       },
+      errorMessage: "Duration cannot be empty",
    },
    description: {
+      trim: true,
+      notEmpty: {
+         options: { ignore_whitespace: true },
+      },
       isString: {
          errorMessage: "Description must be a string.",
       },
@@ -42,6 +61,7 @@ const validateProposal = checkSchema({
          },
          errorMessage: "Description must be 20-350 characters long.",
       },
+      errorMessage: "Description cannot be empty",
    },
 });
 
