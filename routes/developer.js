@@ -1,8 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-const { developerController } = require("../controllers/developerControllers");
+const { saveProposal } = require("../controllers/developerControllers");
+const validateProposal = require("../middlewares/validations/proposalValidation");
+const { validationResults } = require("../middlewares/validations");
 
-router.get("/", developerController);
+router.post(
+   "/create-proposal",
+   validateProposal,
+   validationResults,
+   saveProposal
+);
 
 module.exports = router;

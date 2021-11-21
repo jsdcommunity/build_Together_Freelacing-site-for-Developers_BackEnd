@@ -8,12 +8,13 @@ module.exports = {
       jobData.authorId = req.user.userId;
       let jobId;
 
+      // check author is exist
       try {
-         // check author is exist
-         const { userExist, user } = await checkUserExist({
+         const { isUserExist, user } = await checkUserExist({
             _id: jobData.authorId,
          });
-         if (!userExist) return next(new ErrorResponse(404, "User not found"));
+         if (!isUserExist)
+            return next(new ErrorResponse(404, "User not found"));
          if (!user.active)
             return next(
                new ErrorResponse(
@@ -25,8 +26,8 @@ module.exports = {
          return next(err);
       }
 
+      // Creating job requirement
       try {
-         // Creating job requirement
          const { _id } = await createJob(jobData);
          jobId = _id;
       } catch (err) {

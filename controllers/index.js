@@ -28,8 +28,8 @@ module.exports = {
 
       // Checking if user exist
       try {
-         let { userExist, message } = await checkUserExist({ email });
-         if (userExist) return next(new ErrorResponse(409, message));
+         let { isUserExist, message } = await checkUserExist({ email });
+         if (isUserExist) return next(new ErrorResponse(409, message));
       } catch (err) {
          return next(new ErrorResponse(401, err.message));
       }
@@ -82,8 +82,10 @@ module.exports = {
          const tokenData = await verifyToken(token);
 
          // check for duplicate confirmation link
-         const { userExist } = await checkUserExist({ email: tokenData.email });
-         if (userExist)
+         const { isUserExist } = await checkUserExist({
+            email: tokenData.email,
+         });
+         if (isUserExist)
             throw new ErrorResponse(409, "Email already confirmed!");
 
          // creating new user
@@ -118,8 +120,8 @@ module.exports = {
 
       try {
          // finding user in db
-         const { user, userExist } = await checkUserExist({ email });
-         if (!userExist)
+         const { user, isUserExist } = await checkUserExist({ email });
+         if (!isUserExist)
             throw new ErrorResponse(
                404,
                "There is no account associated with this email, Sign up now"
@@ -165,8 +167,8 @@ module.exports = {
 
       try {
          // check if user exists with giver email
-         const { userExist } = await checkUserExist({ email });
-         if (!userExist)
+         const { isUserExist } = await checkUserExist({ email });
+         if (!isUserExist)
             throw new ErrorResponse(
                404,
                "There is no account associated with this email, Sign up now"

@@ -36,13 +36,36 @@ module.exports = {
                if (Boolean(userExist))
                   resolve({
                      user: userExist,
-                     userExist: true,
+                     isUserExist: Boolean(userExist),
                      message: "This user is already exist",
                   });
                else
                   resolve({
-                     userExist: false,
+                     isUserExist: Boolean(userExist),
                      message: "This user doesn't exist yet",
+                  });
+            })
+            .catch(err =>
+               reject({
+                  message: err.message,
+               })
+            );
+      }),
+
+   checkJobExist: query =>
+      new Promise((resolve, reject) => {
+         JobModel.findOne(query)
+            .then(jobExist => {
+               if (Boolean(jobExist))
+                  resolve({
+                     job: jobExist,
+                     isJobExist: Boolean(jobExist),
+                     message: "This job requirement is already exist",
+                  });
+               else
+                  resolve({
+                     isJobExist: Boolean(jobExist),
+                     message: "This job requirement doesn't exist yet",
                   });
             })
             .catch(err =>
