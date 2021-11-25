@@ -5,6 +5,7 @@ const handlebars = require("handlebars");
 const nodemailer = require("nodemailer");
 const UserModel = require("../models/user");
 const JobModel = require("../models/job");
+const ProposalModel = require("../models/proposal");
 const ErrorResponse = require("../utils/ErrorResponse");
 
 // Creating a instance for nodemailer transporter using official upbit email
@@ -175,6 +176,7 @@ module.exports = {
             )
             .catch(reject);
       }),
+
    getJobsData: () =>
       new Promise((resolve, reject) => {
          JobModel.aggregate([
@@ -207,6 +209,15 @@ module.exports = {
          ])
             .then(jobs => {
                resolve(jobs);
+            })
+            .catch(reject);
+      }),
+
+   getProposalData: query =>
+      new Promise((resolve, reject) => {
+         ProposalModel.findOne(query)
+            .then(proposalData => {
+               resolve(proposalData);
             })
             .catch(reject);
       }),
