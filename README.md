@@ -1,6 +1,6 @@
 <p align="center">
   <a href="" rel="noopener">
- <img width="120px" src="https://raw.githubusercontent.com/jsdcommunity/build_Together_Freelacing-site-for-Developers_FrontEnd/boilerplate/public/logo.png" alt="Upbit logo"></a>
+ <img width="120px" src="https://raw.githubusercontent.com/jsdcommunity/build_Together_Freelacing-site-for-Developers_FrontEnd/master/public/logo.png" alt="Upbit logo"></a>
 </p>
 
 <h3 align="center">UpBit Back End</h3>
