@@ -1,6 +1,9 @@
 const { checkUserExist, checkJobExist } = require("../helpers/index");
 const { createProposal } = require("../helpers/developerHelpers");
 const ErrorResponse = require("../utils/ErrorResponse");
+const {
+   getProposals: getProposalsForDev,
+} = require("../helpers/developerHelpers");
 
 module.exports = {
    saveProposal: async (req, res, next) => {
@@ -50,4 +53,25 @@ module.exports = {
          proposalId,
       });
    },
+
+   getProposals: (req, res, next) =>
+      new Promise(async (resolve, reject) => {
+         let proposals;
+         let { page = 1, count = 12 } = req.query;
+
+         try {
+            proposals = await getProposalsForDev(req.user.userId);
+            page--;
+            let startingIndx = page * count;
+
+            proposals = proposals.splice(startingIndx, count);
+         } catch (err) {
+            return next(err);
+         }
+
+         res.status(200).json({
+            success: true,
+            proposals,
+         });
+      }),
 };

@@ -8,4 +8,11 @@ module.exports = {
             err ? reject(err) : resolve(newProposal);
          });
       }),
+
+   getProposals: developerId =>
+      new Promise((resolve, reject) => {
+         ProposalModel.find({ createdBy: developerId })
+            .then(resolve)
+            .catch(reject);
+      }),
 };
