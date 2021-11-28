@@ -1,4 +1,8 @@
-const { checkUserExist, checkJobExist } = require("../helpers/index");
+const {
+   checkUserExist,
+   checkJobExist,
+   getProposalData,
+} = require("../helpers/index");
 const { createProposal } = require("../helpers/developerHelpers");
 const ErrorResponse = require("../utils/ErrorResponse");
 const {
@@ -11,18 +15,29 @@ module.exports = {
       proposalData.createdBy = req.user.userId;
       let proposalId;
 
+      let user;
+      let job;
+
       // Check buyer is exist
       try {
-         const { user, isUserExist } = await checkUserExist({
+         const { user: userData, isUserExist } = await checkUserExist({
             _id: proposalData.createdBy,
          });
+         user = userData;
          if (!isUserExist)
             return next(new ErrorResponse(404, "User not found"));
-         if (!user.active)
+         if (!userData.active)
             return next(
                new ErrorResponse(
                   403,
                   "You did not have permission to do this because of lack of user information, please update your profile informations."
+               )
+            );
+         if (userData.userType === "buyer")
+            return next(
+               new ErrorResponse(
+                  403,
+                  "You did not have permission to do this because of you are buyer. Buyers can't create job proposals."
                )
             );
       } catch (err) {
@@ -31,10 +46,29 @@ module.exports = {
 
       // Check job requirement is exist
       try {
-         const { job, isJobExist } = await checkJobExist({
+         const { job: jobData, isJobExist } = await checkJobExist({
             _id: proposalData.jobId,
          });
+         job = jobData;
          if (!isJobExist) return next(new ErrorResponse(404, "Job not found"));
+      } catch (err) {
+         return next(err);
+      }
+
+      // Check if this developer already sended any proposal on this job
+      try {
+         const isAlreadyExist = await getProposalData({
+            createdBy: user._id,
+            jobId: job._id,
+         });
+         console.log({ isAlreadyExist });
+         if (isAlreadyExist)
+            return next(
+               new ErrorResponse(
+                  409,
+                  "You already send a proposal to this job requirement!"
+               )
+            );
       } catch (err) {
          return next(err);
       }
