@@ -1,6 +1,7 @@
 const { checkUserExist } = require("../helpers");
 const { createJob } = require("../helpers/buyerHelpers");
 const ErrorResponse = require("../utils/ErrorResponse");
+const { getJobs: getJobsForBuyer } = require("../helpers/buyerHelpers");
 
 module.exports = {
    saveJob: async (req, res, next) => {
@@ -40,4 +41,25 @@ module.exports = {
          jobId,
       });
    },
+   
+   getJobs: (req, res, next) =>
+      new Promise(async (resolve, reject) => {
+         let jobs;
+         let { page = 1, count = 12 } = req.query;
+
+         try {
+            jobs = await getJobsForBuyer(req.user.userId);
+            page--;
+            let startingIndx = page * count;
+
+            jobs = jobs.splice(startingIndx, count);
+         } catch (err) {
+            return next(err);
+         }
+
+         res.status(200).json({
+            success: true,
+            jobs,
+         });
+      }),
 };

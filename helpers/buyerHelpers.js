@@ -8,4 +8,9 @@ module.exports = {
             err ? reject(err) : resolve(newJob);
          });
       }),
+
+   getJobs: buyerId =>
+      new Promise((resolve, reject) => {
+         JobModel.find({ authoId: buyerId }).then(resolve).catch(reject);
+      }),
 };
