@@ -12,8 +12,13 @@ const ErrorResponse = require("../utils/ErrorResponse");
 const transporter = nodemailer.createTransport({
    service: "gmail",
    auth: {
+      type: "OAuth2",
       user: process.env.OFFICIAL_EMAIL,
-      pass: process.env.EMAIL_PASS,
+      clientId: process.env.G_CLIENT_ID,
+      clientSecret: process.env.G_CLIENT_SECRET,
+      refreshToken: process.env.G_REFRESH_TOKEN,
+      accessToken: process.env.G_ACCESS_TOKEN,
+      expires: 3600000,
    },
 });
 

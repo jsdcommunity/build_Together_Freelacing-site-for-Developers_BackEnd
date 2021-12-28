@@ -63,7 +63,7 @@ module.exports = {
          });
          console.log({ response });
       } catch (err) {
-         next(new ErrorResponse(500, err.message));
+         return next(new ErrorResponse(500, err.message));
       }
 
       // Sending status response to front end
